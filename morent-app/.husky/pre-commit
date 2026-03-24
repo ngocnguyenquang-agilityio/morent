@@ -1,0 +1,4 @@
+cd morent-app
+
+pnpm lint
+pnpm format

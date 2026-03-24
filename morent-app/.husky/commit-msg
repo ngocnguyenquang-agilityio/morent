@@ -1,0 +1,3 @@
+cd morent-app
+
+pnpm commitlint --edit $1

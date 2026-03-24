@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+coverage
+pnpm-lock.yaml
+*.ico
+*.png
+*.svg
+*.avif
+*.jpg
+*.jpeg
+*.webp
+*.gif
