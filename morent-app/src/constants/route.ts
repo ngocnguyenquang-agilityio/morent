@@ -1,4 +1,5 @@
 export const ROUTE = {
+  HASH: '#',
   HOME: '/',
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
