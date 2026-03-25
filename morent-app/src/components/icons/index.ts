@@ -1,4 +1,7 @@
 export * from './Chevrons';
+export * from './ChevronDown';
+export * from './ChevronUp';
+export * from './Check';
 export * from './Filter';
 export * from './Heart';
 export * from './Menu';
@@ -7,5 +10,6 @@ export * from './Search';
 export * from './Setting';
 export * from './GasStation';
 export * from './Steering';
+export * from './Swap';
 export * from './People';
 export * from './Rings';
