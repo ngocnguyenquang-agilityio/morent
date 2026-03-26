@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 
 // Polyfill for Radix UI components that use ResizeObserver
 global.ResizeObserver = class ResizeObserver {

@@ -7,7 +7,8 @@ import { useState } from 'react';
 import { CarCard } from '@/components/CarCard';
 
 // Types
-import { Car } from '@/types/car';
+import { Car, HeroBannerVariant } from '@/types/car';
+import { HeroBanner } from '@/components/HeroBanner';
 
 const mockCar: Car = {
   name: 'Koenigsegg',
@@ -44,6 +45,20 @@ const mockCar: Car = {
   ],
 };
 
+const bannerOne = {
+  title: 'The Best Platform for Car Rental',
+  description:
+    'Ease of doing a car rental safely and reliably. Of course at a low price.',
+  imageUrl: '/Koenigsegg.svg',
+};
+
+const bannerTwo = {
+  title: 'Easy way to rent a car at a low price',
+  description:
+    'Providing cheap car rental services and safe and comfortable facilities.',
+  imageUrl: '/Koenigsegg.svg',
+};
+
 const CarsPage = () => {
   const [isFavorite, setIsFavorite] = useState(mockCar.favorite);
 
@@ -53,12 +68,17 @@ const CarsPage = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-4">
       <h1>Cars page</h1>
       <CarCard
         car={{ ...mockCar, favorite: isFavorite }}
         onFavoriteToggle={handleToggleFavorite}
       />
+
+      <div className="flex items-center gap-4">
+        <HeroBanner {...bannerOne} />
+        <HeroBanner {...bannerTwo} variant={HeroBannerVariant.Dark} />
+      </div>
     </div>
   );
 };

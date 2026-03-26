@@ -1,4 +1,3 @@
-export * from './Chevrons';
 export * from './ChevronDown';
 export * from './ChevronUp';
 export * from './Check';
@@ -12,4 +11,3 @@ export * from './GasStation';
 export * from './Steering';
 export * from './Swap';
 export * from './People';
-export * from './Rings';
