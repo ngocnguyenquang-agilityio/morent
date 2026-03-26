@@ -4,6 +4,11 @@ import { Schema } from 'effect';
 // Types
 import { Review } from './review';
 
+export enum HeroBannerVariant {
+  Blue = 'blue',
+  Dark = 'dark',
+}
+
 export const CarType = Schema.Literal(
   'Sport',
   'SUV',
