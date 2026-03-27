@@ -70,7 +70,7 @@ const Button = ({
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     >
       {Icon && <Icon className={cn('size-6', iconClassName)} />}

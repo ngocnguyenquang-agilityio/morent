@@ -37,6 +37,10 @@ const sampleCar = {
   favorite: false,
   discount: 1,
   image: '/Koenigsegg.svg',
+  title: 'Sports car with the best design and acceleration',
+  subtitle:
+    'Safety and comfort while driving a futuristic and elegant sports car',
+  thumbnails: ['/Koenigsegg.svg'],
 };
 
 export const Default: Story = {

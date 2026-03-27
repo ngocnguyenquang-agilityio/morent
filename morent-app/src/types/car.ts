@@ -34,6 +34,9 @@ export const Car = Schema.Struct({
   favorite: Schema.Boolean,
   discount: Schema.Number,
   image: Schema.String,
+  title: Schema.String,
+  subtitle: Schema.String,
+  thumbnails: Schema.Array(Schema.String),
 });
 
 export type Car = typeof Car.Type;

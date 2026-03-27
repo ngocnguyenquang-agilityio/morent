@@ -10,4 +10,5 @@ export * from './Setting';
 export * from './GasStation';
 export * from './Steering';
 export * from './Swap';
+export * from './Star';
 export * from './People';
