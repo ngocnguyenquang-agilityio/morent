@@ -1,8 +1,10 @@
 'use client';
 
 // Lib
-import { useOptimistic, useTransition } from 'react';
 import Image from 'next/image';
+
+// Hooks
+import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 
 // Utils
 import { formatPrice } from '@/utils/formatPrice';
@@ -19,7 +21,6 @@ import {
 // Types
 import type { Car } from '@/types/car';
 
-// Utils
 import { cn } from '@/lib/utils';
 
 interface CarCardProps {
@@ -28,29 +29,13 @@ interface CarCardProps {
 }
 
 export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
-  const [optimisticFavorite, setOptimisticFavorite] = useOptimistic(
+  const { optimisticFavorite, handleFavoriteToggle } = useFavoriteToggle(
     car.favorite,
-    (_current: boolean, next: boolean) => next,
+    onFavoriteToggle,
   );
-  const [, startTransition] = useTransition();
-
-  const handleFavoriteToggle = () => {
-    const next = !optimisticFavorite;
-
-    startTransition(async () => {
-      setOptimisticFavorite(next);
-
-      try {
-        await onFavoriteToggle?.(next);
-      } catch (error) {
-        console.error('Failed to toggle favorite status:', error);
-      }
-    });
-  };
 
   return (
     <div className="w-full max-w-[327px] min-h-[240px] flex flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:max-w-[317px] md:min-h-[388px] md:p-6">
-      {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-bold text-secondary-900">{car.name}</h3>
@@ -73,9 +58,7 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
         </Button>
       </div>
 
-      {/* Main Content: Image & Specs */}
       <div className="my-2 flex flex-1 flex-row items-center md:my-8 md:flex-col md:gap-8">
-        {/* Car Image */}
         <div className="relative flex-1 pr-4 md:w-full md:pr-0">
           <Image
             src={car.image}
@@ -86,7 +69,6 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
           />
         </div>
 
-        {/* Specs Row */}
         <div className="flex flex-col gap-2 text-sm text-secondary-300 md:w-full md:flex-row md:items-center md:justify-between md:gap-0">
           <div className="flex items-center gap-1.5">
             <GasStationIcon className="size-4" />
@@ -103,7 +85,6 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
         </div>
       </div>
 
-      {/* Price & Action */}
       <div className="mt-4 flex items-center justify-between md:mt-6">
         <div>
           <p className="text-lg font-bold text-secondary-900">
