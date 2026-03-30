@@ -1,8 +1,10 @@
 'use client';
 
+import { FormProvider, useForm } from 'react-hook-form';
 // Components
 import { CarInfo } from '@/components/CarInfo';
 import { Reviews } from '@/components/Reviews';
+import { BillingInfo } from '@/components/BillingInfo';
 
 // Types
 import { Car } from '@/types/car';
@@ -60,14 +62,29 @@ const mockCar: Car = {
 };
 
 const CarsPage = () => {
-  return (
-    <div className="space-y-4 px-4">
-      <div className="flex items-stretch gap-8">
-        <CarInfo car={mockCar} />
-      </div>
+  const methods = useForm({
+    defaultValues: {
+      name: '',
+      address: '',
+      phoneNumber: '',
+      city: '',
+      location: '',
+      date: '',
+    },
+  });
 
-      <Reviews reviews={mockCar.reviews} totalCount={mockCar.reviewer} />
-    </div>
+  return (
+    <FormProvider {...methods}>
+      <div className="space-y-4 px-4">
+        <div className="flex items-stretch gap-8">
+          <CarInfo car={mockCar} />
+        </div>
+
+        <Reviews reviews={mockCar.reviews} totalCount={mockCar.reviewer} />
+
+        <BillingInfo />
+      </div>
+    </FormProvider>
   );
 };
 
