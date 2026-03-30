@@ -2,6 +2,7 @@
 
 // Components
 import { CarInfo } from '@/components/CarInfo';
+import { Reviews } from '@/components/Reviews';
 
 // Types
 import { Car } from '@/types/car';
@@ -16,10 +17,28 @@ const mockCar: Car = {
   capacity: 2,
   gasoline: 90,
   rate: 4.0,
-  reviewer: 440,
+  reviewer: 13,
   reviews: [
     {
-      avatar: '/avatar.png',
+      avatar:
+        'https://doodleipsum.com/700x525/avatar-3?bg=6392D9&i=3337d17d1f7d148640bddfe445bb06b4',
+      name: 'Alex Johnson',
+      title: 'CEO at Company',
+      date: 'March 20, 2026',
+      rating: 4,
+      comment: 'Absolutely incredible car. The performance is unmatched.',
+    },
+    {
+      avatar: 'https://testingbot.com/free-online-tools/random-avatar/300',
+      name: 'Alex Johnson',
+      title: 'CEO at Company',
+      date: 'March 20, 2026',
+      rating: 5,
+      comment: 'Absolutely incredible car. The performance is unmatched.',
+    },
+    {
+      avatar:
+        'https://doodleipsum.com/700x525/avatar-3?bg=C863D9&i=a2d3165b02bd2206715193df7b1b5d39',
       name: 'Alex Johnson',
       title: 'CEO at Company',
       date: 'March 20, 2026',
@@ -46,6 +65,8 @@ const CarsPage = () => {
       <div className="flex items-stretch gap-8">
         <CarInfo car={mockCar} />
       </div>
+
+      <Reviews reviews={mockCar.reviews} totalCount={mockCar.reviewer} />
     </div>
   );
 };
