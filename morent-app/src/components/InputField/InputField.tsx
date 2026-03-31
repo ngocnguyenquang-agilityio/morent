@@ -21,7 +21,7 @@ const InputField = ({
   ...props
 }: InputFieldProps) => {
   return (
-    <div className={cn('flex flex-col gap-4', wrapperClassName)}>
+    <div className={cn('flex flex-col gap-3 lg:gap-4', wrapperClassName)}>
       <label
         htmlFor={id}
         className="text-sm lg:text-base font-semibold text-secondary"
