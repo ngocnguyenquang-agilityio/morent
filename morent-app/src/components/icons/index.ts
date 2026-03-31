@@ -15,3 +15,4 @@ export * from './Swap';
 export * from './Star';
 export * from './People';
 export * from './Visa';
+export * from './ShieldCheck';
