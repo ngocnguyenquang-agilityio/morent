@@ -34,6 +34,7 @@ interface LocationPickerProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  error?: string;
 }
 
 export const LocationPicker = ({
@@ -42,6 +43,7 @@ export const LocationPicker = ({
   onChange,
   placeholder = 'Select your city',
   className,
+  error,
 }: LocationPickerProps) => {
   const [open, setOpen] = useState(false);
 
@@ -53,43 +55,46 @@ export const LocationPicker = ({
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          role="combobox"
-          aria-expanded={open}
-          className={cn(
-            'h-auto w-full justify-between px-0 text-xs font-normal hover:bg-transparent',
-            className,
-          )}
-        >
-          <span className="truncate text-xs text-secondary-300">
-            {selectedLabel ?? placeholder}
-          </span>
-          <ChevronDownIcon className="size-6 shrink-0 fill-secondary" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-52 p-0">
-        <Command>
-          <CommandInput placeholder="Search city..." />
-          <CommandList>
-            <CommandEmpty>No location found.</CommandEmpty>
-            <CommandGroup>
-              {locations.map((location) => (
-                <CommandItem
-                  key={location.value}
-                  value={location.label}
-                  data-checked={value === location.value}
-                  onSelect={handleSelect.bind(null, location.value)}
-                >
-                  {location.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            role="combobox"
+            aria-expanded={open}
+            className={cn(
+              'h-auto w-full justify-between px-0 text-xs font-normal hover:bg-transparent',
+              className,
+            )}
+          >
+            <span className="truncate text-xs text-secondary-300">
+              {selectedLabel ?? placeholder}
+            </span>
+            <ChevronDownIcon className="size-6 shrink-0 fill-secondary" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+          <Command>
+            <CommandInput placeholder="Search city..." />
+            <CommandList>
+              <CommandEmpty>No location found.</CommandEmpty>
+              <CommandGroup>
+                {locations.map((location) => (
+                  <CommandItem
+                    key={location.value}
+                    value={location.label}
+                    data-checked={value === location.value}
+                    onSelect={handleSelect.bind(null, location.value)}
+                  >
+                    {location.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {error && <p className="text-sm text-destructive">{error}</p>}
+    </>
   );
 };
