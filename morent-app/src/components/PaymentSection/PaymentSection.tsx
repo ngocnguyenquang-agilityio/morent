@@ -21,7 +21,7 @@ export const PaymentSection = ({
 }: PaymentSectionProps) => {
   return (
     <div className={cn('rounded-[10px] bg-white p-6 shadow-sm', className)}>
-      <div className="mb-8 flex items-start justify-between">
+      <div className="mb-6 lg:mb-8 flex items-start justify-between">
         <div>
           <h2 className="text-base lg:text-lg font-bold text-secondary">
             {title}

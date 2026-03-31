@@ -8,6 +8,7 @@ import { BillingInfo } from '@/components/BillingInfo';
 
 // Types
 import { Car } from '@/types/car';
+import { RentalInfo } from '@/components/RentalInfo';
 
 const mockCar: Car = {
   name: 'Koenigsegg',
@@ -83,6 +84,7 @@ const CarsPage = () => {
         <Reviews reviews={mockCar.reviews} totalCount={mockCar.reviewer} />
 
         <BillingInfo />
+        <RentalInfo />
       </div>
     </FormProvider>
   );

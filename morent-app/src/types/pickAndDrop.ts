@@ -12,9 +12,9 @@ export const LocationSchema = Schema.Struct({
 });
 
 export interface SectionValues {
-  location: string | undefined;
-  date: Date | undefined;
-  time: string | undefined;
+  location?: string;
+  date?: Date;
+  time?: string;
 }
 
 export const PickDropFormSchema = Schema.Struct({
