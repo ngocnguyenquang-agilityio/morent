@@ -1,4 +1,4 @@
-import { formatPrice } from '../formatPrice';
+import { formatPrice } from '../price';
 
 describe('formatPrice', () => {
   describe('without discount', () => {

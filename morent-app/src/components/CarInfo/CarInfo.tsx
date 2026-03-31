@@ -4,7 +4,7 @@
 import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 
 // Utils
-import { formatPrice } from '@/utils/formatPrice';
+import { formatPrice } from '@/utils/price';
 import { cn } from '@/lib/utils';
 
 // Components
