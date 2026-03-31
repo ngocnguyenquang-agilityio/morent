@@ -34,6 +34,8 @@ describe('PaymentSection', () => {
       <PaymentSection
         title="Billing Info"
         subTitle="Please enter your billing info"
+        step={1}
+        totalSteps={4}
       >
         <p>content</p>
       </PaymentSection>,

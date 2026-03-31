@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 
 // Utils
-import { formatPrice } from '@/utils/formatPrice';
+import { formatPrice } from '@/utils/price';
 
 // Components
 import { Button } from '@/components/ui/Button';

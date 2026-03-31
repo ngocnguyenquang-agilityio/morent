@@ -10,8 +10,8 @@ export const VisaIcon = (props: IconProps) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g clip-path="url(#clip0_44_16435)">
-      <g clip-path="url(#clip1_44_16435)">
+    <g clipPath="url(#clip0_44_16435)">
+      <g clipPath="url(#clip1_44_16435)">
         <path
           d="M20.7995 17.7692H16.9111L19.3432 2.28076H23.2313L20.7995 17.7692Z"
           fill="#00579F"

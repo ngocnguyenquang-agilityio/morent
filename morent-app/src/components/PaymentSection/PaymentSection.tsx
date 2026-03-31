@@ -14,13 +14,15 @@ interface PaymentSectionProps {
 export const PaymentSection = ({
   title,
   subTitle,
-  step = 1,
-  totalSteps = 4,
+  step,
+  totalSteps,
   children,
   className,
 }: PaymentSectionProps) => {
   return (
-    <div className={cn('rounded-[10px] bg-white p-6 shadow-sm', className)}>
+    <div
+      className={cn('rounded-[10px] bg-white p-4 lg:p-6 shadow-sm', className)}
+    >
       <div className="mb-6 lg:mb-8 flex items-start justify-between">
         <div>
           <h2 className="text-base lg:text-lg font-bold text-secondary">
@@ -30,9 +32,11 @@ export const PaymentSection = ({
             {subTitle}
           </p>
         </div>
-        <span className="text-sm font-medium text-secondary-300">
-          Step {step} of {totalSteps}
-        </span>
+        {step && totalSteps && (
+          <span className="text-sm font-medium text-secondary-300">
+            Step {step} of {totalSteps}
+          </span>
+        )}
       </div>
       {children}
     </div>
