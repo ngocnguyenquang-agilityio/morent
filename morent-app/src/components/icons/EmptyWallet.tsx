@@ -42,7 +42,7 @@ export const EmptyWalletIcon = (props: IconProps) => (
       d="M3 16.5H8.34C8.98 16.5 9.5 17.02 9.5 17.66V18.94"
       stroke="#90A3BF"
       strokeWidth="1.5"
-      stroke-miterlimit="10"
+      strokeMiterlimit="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -50,7 +50,7 @@ export const EmptyWalletIcon = (props: IconProps) => (
       d="M4.22 15.28L3 16.5L4.22 17.72"
       stroke="#90A3BF"
       strokeWidth="1.5"
-      stroke-miterlimit="10"
+      strokeMiterlimit="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -58,7 +58,7 @@ export const EmptyWalletIcon = (props: IconProps) => (
       d="M9.5 21.78H4.16C3.52 21.78 3 21.26 3 20.62V19.34"
       stroke="#90A3BF"
       strokeWidth="1.5"
-      stroke-miterlimit="10"
+      strokeMiterlimit="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -66,7 +66,7 @@ export const EmptyWalletIcon = (props: IconProps) => (
       d="M8.28125 23.0003L9.50125 21.7803L8.28125 20.5603"
       stroke="#90A3BF"
       strokeWidth="1.5"
-      stroke-miterlimit="10"
+      strokeMiterlimit="10"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
