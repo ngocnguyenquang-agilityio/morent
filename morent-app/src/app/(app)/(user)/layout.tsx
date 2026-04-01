@@ -10,7 +10,9 @@ const CarsLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (
       <aside className="md:w-[260px] lg:w-[360px] flex-shrink-0">
         <FilterSidebar />
       </aside>
-      <div className="flex-1 min-w-0 md:p-6 lg:p-8">{children}</div>
+      <div className="flex-1 min-w-0 md:p-6 lg:p-8 bg-[#F6F7F9]">
+        {children}
+      </div>
     </div>
     <Footer />
   </>

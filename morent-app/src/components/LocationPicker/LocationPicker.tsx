@@ -31,10 +31,11 @@ import { Location } from '@/types/pickAndDrop';
 interface LocationPickerProps {
   value: string | undefined;
   locations: Location[];
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   placeholder?: string;
   className?: string;
   error?: string;
+  readOnly?: boolean;
 }
 
 export const LocationPicker = ({
@@ -44,19 +45,25 @@ export const LocationPicker = ({
   placeholder = 'Select your city',
   className,
   error,
+  readOnly = false,
 }: LocationPickerProps) => {
   const [open, setOpen] = useState(false);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (readOnly) return;
+    setOpen(nextOpen);
+  };
 
   const selectedLabel = locations.find((loc) => loc.value === value)?.label;
 
   const handleSelect = (locationValue: string) => {
-    onChange(locationValue);
+    if (!readOnly) onChange?.(locationValue);
     setOpen(false);
   };
 
   return (
     <>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
@@ -64,6 +71,9 @@ export const LocationPicker = ({
             aria-expanded={open}
             className={cn(
               'h-auto w-full justify-between px-0 text-xs font-normal hover:bg-transparent',
+              {
+                'pointer-events-none': readOnly,
+              },
               className,
             )}
           >
