@@ -29,7 +29,8 @@ describe('Header', () => {
   });
 
   it('renders the mobile menu button', () => {
-    render(<Header />);
+    const mockOnMenuClick = jest.fn();
+    render(<Header onMenuClick={mockOnMenuClick} />);
 
     expect(screen.getByLabelText('Menu')).toBeInTheDocument();
   });
