@@ -24,10 +24,11 @@ import { ChevronDownIcon } from '@/components/icons';
 
 interface DatePickerProps {
   value: Date | undefined;
-  onChange: (date?: Date) => void;
+  onChange?: (date?: Date) => void;
   placeholder?: string;
   className?: string;
   error?: string;
+  readOnly?: boolean;
 }
 
 export const DatePicker = ({
@@ -36,22 +37,31 @@ export const DatePicker = ({
   placeholder = 'Select your date',
   className,
   error,
+  readOnly = false,
 }: DatePickerProps) => {
   const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (readOnly) return;
+    setOpen(nextOpen);
+  };
+
   const handleSelect = (date?: Date) => {
-    onChange(date);
+    if (!readOnly) onChange?.(date);
     setOpen(false);
   };
 
   return (
     <>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
             className={cn(
               'h-auto w-full justify-between px-0 text-xs font-normal hover:bg-transparent',
+              {
+                'pointer-events-none': readOnly,
+              },
               className,
             )}
           >

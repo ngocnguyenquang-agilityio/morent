@@ -15,7 +15,8 @@ interface PickDropSectionProps {
   label: string;
   values: SectionValues;
   locations: Location[];
-  onChange: (values: SectionValues) => void;
+  onChange?: (values: SectionValues) => void;
+  readOnly?: boolean;
   className?: string;
 }
 
@@ -24,12 +25,28 @@ export const PickDropSection = ({
   values,
   locations,
   onChange,
+  readOnly = false,
   className,
 }: PickDropSectionProps) => {
+  const handleLocationChange = (location: string) => {
+    onChange?.({ ...values, location });
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    if (!readOnly) onChange?.({ ...values, date });
+  };
+
+  const handleTimeChange = (time: string) => {
+    if (!readOnly) onChange?.({ ...values, time });
+  };
+
   return (
     <div
       className={cn(
         'flex-1 rounded-xl bg-white p-4 md:px-8 md:py-6',
+        {
+          'pointer-events-none': readOnly,
+        },
         className,
       )}
     >
@@ -44,24 +61,18 @@ export const PickDropSection = ({
           <LocationPicker
             value={values.location}
             locations={locations}
-            onChange={(location) => onChange({ ...values, location })}
+            onChange={handleLocationChange}
           />
         </div>
 
         <div className="flex flex-col gap-1 border-l border-secondary-100 pl-3">
           <span className="text-base font-bold text-secondary">Date</span>
-          <DatePicker
-            value={values.date}
-            onChange={(date) => onChange({ ...values, date })}
-          />
+          <DatePicker value={values.date} onChange={handleDateChange} />
         </div>
 
         <div className="flex flex-col gap-1 border-l border-secondary-100 pl-3">
           <span className="text-base font-bold text-secondary">Time</span>
-          <TimePicker
-            value={values.time}
-            onChange={(time) => onChange({ ...values, time })}
-          />
+          <TimePicker value={values.time} onChange={handleTimeChange} />
         </div>
       </div>
     </div>

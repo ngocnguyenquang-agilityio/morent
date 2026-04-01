@@ -15,10 +15,11 @@ import { generateTimeSlots } from '@/utils/generateTime';
 
 interface TimePickerProps {
   value: string | undefined;
-  onChange: (time: string) => void;
+  onChange?: (time: string) => void;
   placeholder?: string;
   className?: string;
   error?: string;
+  readOnly?: boolean;
 }
 
 const TIME_SLOTS = generateTimeSlots();
@@ -29,13 +30,17 @@ export const TimePicker = ({
   placeholder = 'Select your time',
   className,
   error,
+  readOnly = false,
 }: TimePickerProps) => {
   return (
     <>
-      <Select value={value} onValueChange={onChange}>
+      <Select value={value} onValueChange={readOnly ? undefined : onChange}>
         <SelectTrigger
           className={cn(
             'h-auto w-full border-0 bg-transparent px-0 text-xs font-normal shadow-none focus-visible:ring-0 text-secondary-300 data-placeholder:text-secondary-300',
+            {
+              'pointer-events-none': readOnly,
+            },
             className,
           )}
         >
