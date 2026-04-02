@@ -1,4 +1,5 @@
 import { DetailsRental, DetailsRentalProps } from '@/components/DetailsRental';
+import { TopCars } from '@/components/TopCars';
 
 const rentalDetails: DetailsRentalProps = {
   image: '/Koenigsegg.svg',
@@ -20,8 +21,9 @@ const rentalDetails: DetailsRentalProps = {
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="flex items-center gap-4">
       <DetailsRental {...rentalDetails} />
+      <TopCars />
     </div>
   );
 };

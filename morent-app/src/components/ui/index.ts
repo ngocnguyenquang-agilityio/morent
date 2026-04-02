@@ -1,4 +1,5 @@
 export * from './Button';
+export * from './Chart';
 export * from './Checkbox';
 export * from './Calendar';
 export * from './Command';
