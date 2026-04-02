@@ -30,7 +30,7 @@ export const HeroBanner = ({
   return (
     <section
       className={cn(
-        'relative max-h-[232px] max-w-[327px] min-h-[232px] overflow-hidden rounded-[10px] lg:max-h-[360px] lg:max-w-[640px] lg:w-full lg:min-h-[360px] bg-information-500',
+        'relative w-full max-h-[232px] min-h-[232px] overflow-hidden rounded-[10px] lg:max-h-[360px] lg:min-h-[360px] bg-information-500',
         {
           'bg-primary-500': isDarkVariant,
         },
@@ -41,8 +41,9 @@ export const HeroBanner = ({
       <Image
         src={isDarkVariant ? '/images/chevrons-bg.png' : '/images/rings-bg.png'}
         alt="Background"
-        fill
-        className="object-cover"
+        width={640}
+        height={360}
+        className="absolute inset-0 h-full w-full object-cover"
       />
 
       {/* Content */}
