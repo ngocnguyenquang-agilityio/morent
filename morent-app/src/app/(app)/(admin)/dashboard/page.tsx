@@ -1,4 +1,5 @@
 import { DetailsRental, DetailsRentalProps } from '@/components/DetailsRental';
+import { RecentTransaction } from '@/components/RecentTransaction';
 import { TopCars } from '@/components/TopCars';
 
 const rentalDetails: DetailsRentalProps = {
@@ -21,9 +22,10 @@ const rentalDetails: DetailsRentalProps = {
 
 const Dashboard = () => {
   return (
-    <div className="flex items-center gap-4">
+    <div className="space-y-4">
       <DetailsRental {...rentalDetails} />
       <TopCars />
+      <RecentTransaction />
     </div>
   );
 };
