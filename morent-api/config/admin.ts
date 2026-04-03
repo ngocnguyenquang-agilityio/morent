@@ -1,6 +1,6 @@
 import type { Core } from "@strapi/strapi";
 
-import { ADMIN } from "@constant";
+import { ADMIN } from "../constant";
 
 const config = ({
   env,

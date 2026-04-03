@@ -1,7 +1,7 @@
 import path from "path";
 import type { Core } from "@strapi/strapi";
 
-import { DATABASE, ENV_DEFAULTS } from "@constant";
+import { DATABASE, ENV_DEFAULTS } from "../constant";
 
 const config = ({
   env,

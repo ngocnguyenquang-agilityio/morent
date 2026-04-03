@@ -1,6 +1,6 @@
 import type { Core } from "@strapi/strapi";
 
-import { ENV_DEFAULTS, SERVER } from "@constant";
+import { ENV_DEFAULTS, SERVER } from "../constant";
 
 const config = ({
   env,
