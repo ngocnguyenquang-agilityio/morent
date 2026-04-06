@@ -1,0 +1,81 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cars",
+  "info": {
+    "singularName": "car",
+    "pluralName": "cars",
+    "displayName": "Car",
+    "description": "Car rental listing"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": ["Sport", "SUV", "MPV", "Sedan", "Coupe", "Hatchback"],
+      "required": true
+    },
+    "steering": {
+      "type": "enumeration",
+      "enum": ["Manual", "Electric"],
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "capacity": {
+      "type": "integer",
+      "required": true
+    },
+    "gasoline": {
+      "type": "integer",
+      "required": true
+    },
+    "rate": {
+      "type": "decimal",
+      "required": true
+    },
+    "reviewer": {
+      "type": "integer",
+      "required": true
+    },
+
+    "favorite": {
+      "type": "boolean",
+      "default": false
+    },
+    "discount": {
+      "type": "decimal",
+      "default": 0
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string",
+      "required": true
+    },
+    "thumbnails": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    }
+  }
+}

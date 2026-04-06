@@ -3,6 +3,9 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Geist_Mono } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 
+// Providers
+import { QueryProvider } from '@/providers/QueryProvider';
+
 // Styles
 import './globals.css';
 
@@ -33,7 +36,9 @@ const RootLayout = ({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ClerkProvider>{children}</ClerkProvider>
+        <ClerkProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

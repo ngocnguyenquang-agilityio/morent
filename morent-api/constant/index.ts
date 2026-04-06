@@ -51,3 +51,8 @@ export const ENV_DEFAULTS = {
   DB_POOL_MAX: 10,
   TIMEOUT: 60000,
 } as const;
+
+export const PAGE_SIZE_DEFAULTS = {
+  POPULAR: 4,
+  RECOMMENDATION: 8,
+};

@@ -9,3 +9,4 @@ export * from './InputGroup';
 export * from './Popover';
 export * from './Select';
 export * from './Textarea';
+export * from './Skeleton';
