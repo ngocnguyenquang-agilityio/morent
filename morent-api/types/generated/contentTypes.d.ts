@@ -430,6 +430,50 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCarCar extends Struct.CollectionTypeSchema {
+  collectionName: 'cars';
+  info: {
+    description: 'Car rental listing';
+    displayName: 'Car';
+    pluralName: 'cars';
+    singularName: 'car';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    capacity: Schema.Attribute.Integer & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    discount: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    favorite: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    gasoline: Schema.Attribute.Integer & Schema.Attribute.Required;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::car.car'> &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    price: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    rate: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    reviewer: Schema.Attribute.Integer & Schema.Attribute.Required;
+    steering: Schema.Attribute.Enumeration<['Manual', 'Electric']> &
+      Schema.Attribute.Required;
+    subtitle: Schema.Attribute.String & Schema.Attribute.Required;
+    thumbnails: Schema.Attribute.Media<'images', true>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    type: Schema.Attribute.Enumeration<
+      ['Sport', 'SUV', 'MPV', 'Sedan', 'Coupe', 'Hatchback']
+    > &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -941,6 +985,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::car.car': ApiCarCar;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

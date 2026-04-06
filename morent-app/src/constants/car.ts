@@ -10,6 +10,14 @@ export const CAR_DATA = [
 
 export const TOTAL_CARS = 120;
 
+export const DEFAULT_PAGE_SIZE = 8;
+
+export const DEFAULT_CARS = {
+  POPULAR_COUNT: 4,
+  RECOMMENDATION_COUNT: 8,
+  PAGE_SIZE: 8,
+};
+
 export const POPULAR_CARS: Car[] = [
   {
     name: 'Koenigsegg',
