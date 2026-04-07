@@ -1,3 +1,5 @@
+'use client';
+
 // Lib
 import Link from 'next/link';
 
@@ -16,11 +18,16 @@ import { Button } from '@/components/ui';
 // Constants
 import { ROUTE } from '@/constants/route';
 
+// Stores
+import { useFilterSidebarStore } from '@/stores/filterSidebar';
+
 type HeaderProps = {
   onMenuClick?: () => void;
 };
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
+  const openFilter = useFilterSidebarStore((state) => state.open);
+
   return (
     <header className="bg-white border-b border-secondary-100/40">
       {/* Desktop */}
@@ -101,6 +108,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             icon={FilterIcon}
             aria-label="Filter"
             className="rounded-lg"
+            onClick={openFilter}
           />
         </div>
       </div>

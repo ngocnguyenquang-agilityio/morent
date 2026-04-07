@@ -5,6 +5,7 @@ import { CarInfo } from './CarInfo';
 import type { Car } from '@/types/car';
 
 const baseCar: Car = {
+  documentId: 'mock-nissan-gt-r',
   name: 'Nissan GT - R',
   description:
     'NISMO has become the embodiment of Nissan\'s outstanding performance, inspired by the most unforgiving proving ground, the "race track".',
