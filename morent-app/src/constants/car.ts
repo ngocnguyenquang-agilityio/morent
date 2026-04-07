@@ -18,8 +18,15 @@ export const DEFAULT_CARS = {
   PAGE_SIZE: 8,
 };
 
+export const CAR_PARAMS = {
+  TYPE: 'type',
+  CAPACITY: 'capacity',
+  MAX_PRICE: 'maxPrice',
+};
+
 export const POPULAR_CARS: Car[] = [
   {
+    documentId: 'mock-koenigsegg',
     name: 'Koenigsegg',
     type: 'Sport',
     steering: 'Manual',
@@ -38,6 +45,7 @@ export const POPULAR_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-nissan-gt-r-1',
     name: 'Nissan GT - R',
     type: 'Sport',
     steering: 'Manual',
@@ -56,6 +64,7 @@ export const POPULAR_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-rolls-royce',
     name: 'Rolls - Royce',
     type: 'Sedan',
     steering: 'Manual',
@@ -74,6 +83,7 @@ export const POPULAR_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-nissan-gt-r-2',
     name: 'Nissan GT - R',
     type: 'Sport',
     steering: 'Manual',
@@ -95,6 +105,7 @@ export const POPULAR_CARS: Car[] = [
 
 export const RECOMMENDATION_CARS: Car[] = [
   {
+    documentId: 'mock-all-new-rush',
     name: 'All New Rush',
     type: 'SUV',
     steering: 'Manual',
@@ -113,6 +124,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-cr-v-1',
     name: 'CR - V',
     type: 'SUV',
     steering: 'Manual',
@@ -131,6 +143,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-all-new-terios',
     name: 'All New Terios',
     type: 'SUV',
     steering: 'Manual',
@@ -149,6 +162,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-cr-v-2',
     name: 'CR - V',
     type: 'SUV',
     steering: 'Manual',
@@ -167,6 +181,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-mg-zx-exclusive',
     name: 'MG ZX Exclusice',
     type: 'Hatchback',
     steering: 'Manual',
@@ -185,6 +200,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-new-mg-zs-1',
     name: 'New MG ZS',
     type: 'SUV',
     steering: 'Manual',
@@ -203,6 +219,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-mg-zx-excite',
     name: 'MG ZX Excite',
     type: 'Hatchback',
     steering: 'Manual',
@@ -221,6 +238,7 @@ export const RECOMMENDATION_CARS: Car[] = [
     thumbnails: [],
   },
   {
+    documentId: 'mock-new-mg-zs-2',
     name: 'New MG ZS',
     type: 'SUV',
     steering: 'Manual',

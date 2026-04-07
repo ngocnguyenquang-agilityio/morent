@@ -64,9 +64,36 @@ const fetchAndParseCars = (
     ),
   );
 
-const buildCarsQuery = (params?: object): string =>
+const carsFilterQuery = (
+  filters?: GetCarsParams['filters'],
+): Record<string, unknown> => {
+  if (!filters) return {};
+
+  const strapiFilters: Record<string, unknown> = {};
+
+  if (filters.type && filters.type.length > 0) {
+    strapiFilters.type = { $in: filters.type };
+  }
+
+  if (filters.capacity && filters.capacity.length > 0) {
+    strapiFilters.capacity = { $in: filters.capacity };
+  }
+
+  if (filters.price?.max !== undefined) {
+    strapiFilters.price = { $lte: filters.price.max };
+  }
+
+  return strapiFilters;
+};
+
+const buildCarsQuery = (params?: GetCarsParams): string =>
   qs.stringify(
-    { populate: ['image', 'thumbnails'], ...params },
+    {
+      populate: ['image', 'thumbnails'],
+      filters: carsFilterQuery(params?.filters),
+      pagination: params?.pagination,
+      sort: params?.sort,
+    },
     { encodeValuesOnly: true },
   );
 

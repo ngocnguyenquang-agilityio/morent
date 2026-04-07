@@ -35,7 +35,7 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
   );
 
   return (
-    <div className="w-full max-w-[327px] min-h-[240px] flex flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:max-w-[317px] md:min-h-[388px] md:p-6">
+    <div className="mx-auto flex min-h-[240px] w-full flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:min-h-[388px] md:p-6">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-bold text-secondary-900">{car.name}</h3>
@@ -85,8 +85,8 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between md:mt-6">
-        <div>
+      <div className="mt-4 flex items-center justify-between gap-2 md:mt-6">
+        <div className="flex flex-col">
           <p className="text-lg font-bold text-secondary-900">
             ${formatPrice(car.price, car.discount)}
             <span className="text-sm font-normal text-secondary-300">
@@ -99,7 +99,9 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
             </p>
           )}
         </div>
-        <Button className="px-5 py-6 text-base">Rental Now</Button>
+        <Button className="h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base">
+          Rental Now
+        </Button>
       </div>
     </div>
   );

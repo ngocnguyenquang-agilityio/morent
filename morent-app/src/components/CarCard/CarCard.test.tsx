@@ -14,6 +14,7 @@ jest.mock('next/image', () => ({
 }));
 
 const baseCar: Car = {
+  documentId: 'mock-koenigsegg',
   name: 'Koenigsegg',
   description: 'A luxury sports car',
   type: 'Sport',
@@ -27,6 +28,9 @@ const baseCar: Car = {
   favorite: false,
   discount: 10,
   image: '/cars/koenigsegg.png',
+  title: '',
+  subtitle: '',
+  thumbnails: [],
 };
 
 /**

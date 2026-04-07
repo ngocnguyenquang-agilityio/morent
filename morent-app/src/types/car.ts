@@ -25,6 +25,7 @@ export const CarType = Schema.Literal(
 export const Steering = Schema.Literal('Manual', 'Electric');
 
 export const Car = Schema.Struct({
+  documentId: Schema.String,
   name: Schema.String,
   description: Schema.String,
   type: CarType,
@@ -52,10 +53,9 @@ const StrapiMedia = Schema.Struct({ url: Schema.String });
 const StrapiCarData = Schema.Struct({
   ...Car.fields,
   id: Schema.Number,
-  documentId: Schema.String,
   reviews: Schema.optionalWith(Schema.Array(Review), { default: () => [] }),
   image: StrapiMedia,
-  thumbnails: Schema.Array(StrapiMedia),
+  thumbnails: Schema.NullOr(Schema.Array(StrapiMedia)),
 });
 
 const TransformCarData = Schema.transform(StrapiCarData, Car, {
@@ -63,12 +63,11 @@ const TransformCarData = Schema.transform(StrapiCarData, Car, {
   decode: ({ image, thumbnails, ...rest }) => ({
     ...rest,
     image: getMediaUrl(image.url),
-    thumbnails: thumbnails.map((t) => getMediaUrl(t.url)),
+    thumbnails: thumbnails ? thumbnails.map((t) => getMediaUrl(t.url)) : [],
   }),
   encode: ({ image, thumbnails, ...rest }) => ({
     ...rest,
     id: 0,
-    documentId: '',
     image: { url: image },
     thumbnails: thumbnails.map((url) => ({ url })),
   }),
@@ -95,9 +94,9 @@ export interface PaginationMeta {
 
 export interface GetCarsParams {
   filters?: {
-    type?: string;
+    type?: string[];
     steering?: string;
-    capacity?: number;
+    capacity?: number[];
     price?: { min?: number; max?: number };
   };
   pagination?: {

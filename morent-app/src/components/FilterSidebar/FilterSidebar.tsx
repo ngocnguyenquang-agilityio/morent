@@ -38,32 +38,30 @@ export const FilterSidebar = ({
 
   const handleTypeToggle = useCallback(
     (label: string) => {
-      setSelectedTypes((prev) => {
-        const next = prev.includes(label)
-          ? prev.filter((t) => t !== label)
-          : [...prev, label];
-        onFiltersChange?.({
-          types: next,
-          capacities: selectedCapacities,
-          maxPrice,
-        });
-        return next;
+      const next = selectedTypes.includes(label)
+        ? selectedTypes.filter((t) => t !== label)
+        : [...selectedTypes, label];
+
+      setSelectedTypes(next);
+      onFiltersChange?.({
+        types: next,
+        capacities: selectedCapacities,
+        maxPrice,
       });
     },
-    [onFiltersChange, selectedCapacities, maxPrice],
+    [onFiltersChange, selectedTypes, selectedCapacities, maxPrice],
   );
 
   const handleCapacityToggle = useCallback(
     (label: string) => {
-      setSelectedCapacities((prev) => {
-        const next = prev.includes(label)
-          ? prev.filter((c) => c !== label)
-          : [...prev, label];
-        onFiltersChange?.({ types: selectedTypes, capacities: next, maxPrice });
-        return next;
-      });
+      const next = selectedCapacities.includes(label)
+        ? selectedCapacities.filter((c) => c !== label)
+        : [...selectedCapacities, label];
+
+      setSelectedCapacities(next);
+      onFiltersChange?.({ types: selectedTypes, capacities: next, maxPrice });
     },
-    [onFiltersChange, selectedTypes, maxPrice],
+    [onFiltersChange, selectedTypes, selectedCapacities, maxPrice],
   );
 
   const handlePriceChange = useCallback(

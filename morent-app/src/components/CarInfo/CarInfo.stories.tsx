@@ -24,6 +24,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const sampleCar = {
+  documentId: 'mock-nissan-gt-r',
   name: 'Nissan GT - R',
   description:
     'NISMO has become the embodiment of Nissan\'s outstanding performance, inspired by the most unforgiving proving ground, the "race track".',
