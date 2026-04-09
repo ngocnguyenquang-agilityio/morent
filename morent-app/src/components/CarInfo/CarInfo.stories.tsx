@@ -68,10 +68,3 @@ export const HighRating: Story = {
 export const LowRating: Story = {
   args: { car: { ...sampleCar, rate: 2, reviewer: 12 } },
 };
-
-export const WithRentNowHandler: Story = {
-  args: {
-    car: sampleCar,
-    onRentNow: () => alert('Renting now!'),
-  },
-};

@@ -7,7 +7,11 @@ import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 import { formatPrice } from '@/utils/price';
 import { cn } from '@/lib/utils';
 
+// Constants
+import { ROUTE } from '@/constants/route';
+
 // Components
+import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { HeartIcon, StarIcon } from '@/components/icons';
 import { CarImageGallery } from '@/components/CarImageGallery';
@@ -19,16 +23,10 @@ import type { Car } from '@/types/car';
 interface CarInfoProps {
   car: Car;
   onFavoriteToggle?: (favorite: boolean) => Promise<void>;
-  onRentNow?: () => void;
   className?: string;
 }
 
-export const CarInfo = ({
-  car,
-  onFavoriteToggle,
-  onRentNow,
-  className,
-}: CarInfoProps) => {
+export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
   const { optimisticFavorite, handleFavoriteToggle } = useFavoriteToggle(
     car.favorite,
     onFavoriteToggle,
@@ -37,14 +35,19 @@ export const CarInfo = ({
   const fullStars = Math.floor(car.rate);
 
   return (
-    <div className={cn('flex flex-col lg:flex-row lg:gap-8 gap-6', className)}>
+    <div
+      className={cn(
+        'flex flex-col lg:flex-row lg:gap-8 lg:justify-between gap-6',
+        className,
+      )}
+    >
       <CarImageGallery
         title={car.title}
         subtitle={car.subtitle}
         thumbnails={car.thumbnails}
       />
 
-      <div className="flex flex-col rounded-[10px] bg-white p-6 shadow-sm gap-8 max-w-[492px]">
+      <div className="flex flex-col rounded-[10px] bg-white p-6 shadow-sm gap-8 w-full">
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-xl font-bold text-secondary-900">{car.name}</h2>
@@ -112,8 +115,8 @@ export const CarInfo = ({
               </p>
             )}
           </div>
-          <Button className="h-auto px-8 py-4 text-base" onClick={onRentNow}>
-            Rent Now
+          <Button asChild className="h-auto px-8 py-4 text-base">
+            <Link href={ROUTE.PAYMENT(car.documentId)}>Rent Now</Link>
           </Button>
         </div>
       </div>

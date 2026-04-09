@@ -1,16 +1,22 @@
-interface CarDetailsProps {
-  params: Promise<{ id: string }>;
+// Lib
+import { notFound } from 'next/navigation';
+
+// Services
+import { fetchCarById } from '@/services/cars';
+
+// Components
+import { CarDetailsContent } from '@/components/CarDetailsContent';
+
+interface CarDetailsPageProps {
+  params: Promise<{ carId: string }>;
 }
 
-const CarDetails = async ({ params }: CarDetailsProps) => {
-  const { id } = await params;
+const CarDetailsPage = async ({ params }: CarDetailsPageProps) => {
+  const { carId } = await params;
 
-  return (
-    <div>
-      <h1>Car Details</h1>
-      <p>Car ID: {id}</p>
-    </div>
-  );
+  const car = await fetchCarById(carId).catch(() => notFound());
+
+  return <CarDetailsContent car={car} />;
 };
 
-export default CarDetails;
+export default CarDetailsPage;

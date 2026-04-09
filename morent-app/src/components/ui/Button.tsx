@@ -73,8 +73,14 @@ const Button = ({
       className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     >
-      {Icon && <Icon className={cn('size-6', iconClassName)} />}
-      {children}
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {Icon && <Icon className={cn('size-6', iconClassName)} />}
+          {children}
+        </>
+      )}
     </Comp>
   );
 };

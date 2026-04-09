@@ -12,6 +12,7 @@ import { fetchCars } from '@/services/cars';
 import { CarsApiResult, GetCarsParams } from '@/types/car';
 
 // Constants
+import { ROUTE } from '@/constants/route';
 import { CAR_KEYS } from '@/constants/queryKeys';
 import { DEFAULT_PAGE_SIZE } from '@/constants/car';
 
@@ -96,7 +97,11 @@ export const CarsList = () => {
       <>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 xl:grid-cols-3 xl:gap-8">
           {allCars.map((car) => (
-            <CarCard key={car.documentId} car={car} />
+            <CarCard
+              key={car.documentId}
+              car={car}
+              href={ROUTE.CAR_DETAILS(car.documentId)}
+            />
           ))}
         </div>
 

@@ -85,6 +85,11 @@ export const StrapiCarsResponse = Schema.Struct({
   }),
 });
 
+export const StrapiCarResponse = Schema.Struct({
+  data: TransformCarData,
+  meta: Schema.Struct({}),
+});
+
 export interface PaginationMeta {
   page: number;
   pageSize: number;

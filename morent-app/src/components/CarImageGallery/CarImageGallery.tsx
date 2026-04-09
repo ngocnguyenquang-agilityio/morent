@@ -26,7 +26,7 @@ export const CarImageGallery = ({
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <div className={cn('flex flex-col gap-6 max-w-[492px]', className)}>
+    <div className={cn('flex flex-col gap-6 w-full', className)}>
       {selectedIndex === 0 ? (
         <div className="relative min-h-[360px] overflow-hidden rounded-[10px] bg-primary-500 p-6">
           <Image

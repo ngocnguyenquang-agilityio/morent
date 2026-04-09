@@ -44,6 +44,20 @@ describe('RecommendationCarsSection', () => {
     expect(screen.getByText('Recommendation Car')).toBeInTheDocument();
   });
 
+  it('renders a custom label', () => {
+    mockUseInfiniteQuery.mockReturnValue({
+      data: { pages: [firstPage], pageParams: [1] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    render(<RecommendationCarsSection label="Related Cars" />);
+    expect(screen.getByText('Related Cars')).toBeInTheDocument();
+  });
+
   it('renders skeleton cards while loading', () => {
     mockUseInfiniteQuery.mockReturnValue({
       data: undefined,
@@ -72,7 +86,7 @@ describe('RecommendationCarsSection', () => {
     });
     render(<RecommendationCarsSection />);
     expect(
-      screen.getByText('Failed to load recommendation cars'),
+      screen.getByText('Failed to fetch recommendation cars'),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Try again' }),
@@ -188,5 +202,82 @@ describe('RecommendationCarsSection', () => {
     render(<RecommendationCarsSection />);
     await user.click(screen.getByRole('button', { name: 'Try again' }));
     expect(refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows "View All" link when isShowViewAll is true', () => {
+    mockUseInfiniteQuery.mockReturnValue({
+      data: { pages: [firstPage], pageParams: [1] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    render(<RecommendationCarsSection isShowViewAll />);
+    const link = screen.getByRole('link', { name: 'View All' });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/cars');
+  });
+
+  it('hides total car count when isShowViewAll is true', () => {
+    mockUseInfiniteQuery.mockReturnValue({
+      data: { pages: [firstPage], pageParams: [1] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: true,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    render(<RecommendationCarsSection isShowViewAll />);
+    expect(screen.queryByText('16 Cars')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Show more car' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('hides "View All" link by default', () => {
+    mockUseInfiniteQuery.mockReturnValue({
+      data: { pages: [firstPage], pageParams: [1] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    render(<RecommendationCarsSection />);
+    expect(
+      screen.queryByRole('link', { name: 'View All' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('applies 3-column grid when gridCols is 3', () => {
+    mockUseInfiniteQuery.mockReturnValue({
+      data: { pages: [firstPage], pageParams: [1] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    const { container } = render(<RecommendationCarsSection gridCols={3} />);
+    expect(container.querySelector('.xl\\:grid-cols-3')).toBeInTheDocument();
+  });
+
+  it('applies 4-column grid by default', () => {
+    mockUseInfiniteQuery.mockReturnValue({
+      data: { pages: [firstPage], pageParams: [1] },
+      fetchNextPage: jest.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+      refetch: jest.fn(),
+    });
+    const { container } = render(<RecommendationCarsSection />);
+    expect(container.querySelector('.xl\\:grid-cols-4')).toBeInTheDocument();
   });
 });
