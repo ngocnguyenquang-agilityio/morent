@@ -16,4 +16,5 @@ export const PATH = {
   CARS: '/api/cars',
   CARS_POPULAR: '/api/cars/popular',
   CAR: (documentId: string) => `/api/cars/${documentId}`,
+  USERS: '/api/users',
 };

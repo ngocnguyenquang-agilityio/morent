@@ -1,3 +1,8 @@
+export const USER_ERROR = {
+  FETCH_USER: 'Failed to fetch user',
+  PARSE_RESPONSE: 'Failed to parse user data from server',
+} as const;
+
 export const CAR_ERROR = {
   FETCH_POPULAR: 'Failed to fetch popular cars',
   FETCH_RECOMMENDATION: 'Failed to fetch recommendation cars',
