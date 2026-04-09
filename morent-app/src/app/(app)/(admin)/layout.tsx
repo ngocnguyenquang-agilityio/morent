@@ -1,29 +1,34 @@
-'use client';
-
 // Lib
-import { useState } from 'react';
+import { redirect } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';
+
+// Services
+import { fetchStrapiUserByClerkId } from '@/services/user';
 
 // Components
-import { Header } from '@/components/Header';
-import { AdminSidebar } from '@/components/AdminSidebar/AdminSidebar';
+import { AdminLayoutContent } from '@/components/AdminLayoutContent/AdminLayoutContent';
 
-const AdminLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+// Constants
+import { ROUTE } from '@/constants/route';
 
-  const handleMenuClick = () => setIsSidebarOpen((prev) => !prev);
-  const handleSidebarClose = () => setIsSidebarOpen(false);
+const ADMIN_ROLE_TYPE = 'admin';
 
-  return (
-    <div className="flex h-screen flex-col">
-      <Header onMenuClick={handleMenuClick} />
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        <AdminSidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} />
-        <div className="flex-1 min-w-0 overflow-y-auto bg-[#F6F7F9] p-8">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+const AdminLayout = async ({
+  children,
+}: Readonly<{ children: React.ReactNode }>) => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    redirect(ROUTE.SIGN_IN);
+  }
+
+  const strapiUser = await fetchStrapiUserByClerkId(userId);
+
+  if (!strapiUser || strapiUser.role.type !== ADMIN_ROLE_TYPE) {
+    redirect(ROUTE.HOME);
+  }
+
+  return <AdminLayoutContent>{children}</AdminLayoutContent>;
 };
 
 export default AdminLayout;
