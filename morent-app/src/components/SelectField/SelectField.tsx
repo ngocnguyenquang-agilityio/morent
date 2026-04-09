@@ -6,12 +6,14 @@ interface SelectFieldProps {
   label: string;
   children: ReactNode;
   className?: string;
+  error?: string;
 }
 
 export const SelectField = ({
   label,
   children,
   className,
+  error,
 }: SelectFieldProps) => (
   <div className={cn('flex flex-col gap-3 lg:gap-4', className)}>
     <span className="text-sm lg:text-base font-semibold text-secondary">
@@ -20,5 +22,6 @@ export const SelectField = ({
     <div className="flex items-center rounded-xl bg-[#F6F7F9] px-5 py-4">
       {children}
     </div>
+    {error && <p className="text-sm text-destructive">{error}</p>}
   </div>
 );

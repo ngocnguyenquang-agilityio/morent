@@ -10,6 +10,19 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/',
 }));
 
+jest.mock('@clerk/nextjs', () => ({
+  useUser: () => ({ user: null, isSignedIn: false }),
+  useClerk: () => ({ signOut: jest.fn() }),
+}));
+
+jest.mock('@/stores/filterSidebar', () => ({
+  useFilterSidebarStore: () => jest.fn(),
+}));
+
+jest.mock('@/hooks/useDebounce', () => ({
+  useDebounce: (fn: unknown) => fn,
+}));
+
 describe('Header', () => {
   it('renders the logo with a link to home', () => {
     render(<Header />);

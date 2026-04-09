@@ -4,6 +4,7 @@
 import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useUser, useClerk } from '@clerk/nextjs';
 
 // Components
 import {
@@ -12,10 +13,18 @@ import {
   MenuIcon,
   NotificationIcon,
   SettingIcon,
+  SignInIcon,
+  SignOutIcon,
 } from '@/components/icons';
 import { Avatar } from '@/components/Avatar';
 import { SearchInput } from '@/components/SearchInput';
-import { Button } from '@/components/ui';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui';
 
 // Constants
 import { ROUTE } from '@/constants/route';
@@ -32,6 +41,8 @@ type HeaderProps = {
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
   const router = useRouter();
+  const { user, isSignedIn } = useUser();
+  const { signOut } = useClerk();
   const openFilter = useFilterSidebarStore((state) => state.open);
   const [searchValue, setSearchValue] = useState('');
 
@@ -52,6 +63,47 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
     setSearchValue(value);
     debouncedNavigate(value);
   };
+
+  const handleSignOut = () => {
+    signOut({ redirectUrl: ROUTE.HOME });
+  };
+
+  const avatarImageUrl = user?.imageUrl;
+  const avatarName = user?.fullName ?? user?.username;
+
+  const signInButton = (
+    <Button asChild variant="default" size="lg" className="gap-2 px-4">
+      <Link href={ROUTE.SIGN_IN}>
+        <SignInIcon className="size-4 fill-white" />
+        <span>Sign In</span>
+      </Link>
+    </Button>
+  );
+
+  const avatarDropdown = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="User menu"
+        >
+          <Avatar imageUrl={avatarImageUrl} name={avatarName} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[160px]">
+        <DropdownMenuItem
+          className="cursor-pointer gap-2 px-3 py-2"
+          onSelect={handleSignOut}
+        >
+          <SignOutIcon className="size-4 fill-secondary" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  const userAction = isSignedIn ? avatarDropdown : signInButton;
 
   return (
     <header className="bg-white border-b border-secondary-100/40">
@@ -97,7 +149,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             icon={SettingIcon}
             aria-label="Settings"
           />
-          <Avatar />
+          {userAction}
         </div>
       </div>
 
@@ -114,9 +166,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
               onClick={onMenuClick}
             />
           )}
-          <div className="ml-auto">
-            <Avatar />
-          </div>
+          <div className="ml-auto">{userAction}</div>
         </div>
 
         <div className="px-6 pb-4">

@@ -63,14 +63,16 @@ export const RentalSummary = ({
             <Image
               src="/images/chevrons-bg.png"
               alt=""
-              fill
+              width={132}
+              height={80}
               className="object-cover pointer-events-none"
             />
             <Image
               src={carImage}
               alt={carName}
-              fill
-              className="relative z-10 object-contain p-2"
+              width={132}
+              height={80}
+              className="absolute inset-0 z-10 object-contain p-2"
             />
           </div>
           <div>

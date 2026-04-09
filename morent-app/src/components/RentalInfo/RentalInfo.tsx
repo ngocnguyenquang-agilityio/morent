@@ -49,12 +49,15 @@ export const RentalInfo = ({
               control={control}
               name="pickUp.location"
               render={({ field, fieldState }) => (
-                <SelectField label="Locations" className="order-1">
+                <SelectField
+                  label="Locations"
+                  className="order-1"
+                  error={fieldState.error?.message}
+                >
                   <LocationPicker
                     value={field.value}
                     locations={locations}
                     onChange={field.onChange}
-                    error={fieldState.error?.message}
                   />
                 </SelectField>
               )}
@@ -64,12 +67,12 @@ export const RentalInfo = ({
               control={control}
               name="pickUp.time"
               render={({ field, fieldState }) => (
-                <SelectField label="Time" className="order-2 md:order-3">
-                  <TimePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    error={fieldState.error?.message}
-                  />
+                <SelectField
+                  label="Time"
+                  className="order-2 md:order-3"
+                  error={fieldState.error?.message}
+                >
+                  <TimePicker value={field.value} onChange={field.onChange} />
                 </SelectField>
               )}
             />
@@ -78,12 +81,12 @@ export const RentalInfo = ({
               control={control}
               name="pickUp.date"
               render={({ field, fieldState }) => (
-                <SelectField label="Date" className="order-3 md:order-2">
-                  <DatePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    error={fieldState.error?.message}
-                  />
+                <SelectField
+                  label="Date"
+                  className="order-3 md:order-2"
+                  error={fieldState.error?.message}
+                >
+                  <DatePicker value={field.value} onChange={field.onChange} />
                 </SelectField>
               )}
             />
@@ -97,12 +100,15 @@ export const RentalInfo = ({
               control={control}
               name="dropOff.location"
               render={({ field, fieldState }) => (
-                <SelectField label="Locations" className="order-1">
+                <SelectField
+                  label="Locations"
+                  className="order-1"
+                  error={fieldState.error?.message}
+                >
                   <LocationPicker
                     value={field.value}
                     locations={locations}
                     onChange={field.onChange}
-                    error={fieldState.error?.message}
                   />
                 </SelectField>
               )}
@@ -112,12 +118,12 @@ export const RentalInfo = ({
               control={control}
               name="dropOff.time"
               render={({ field, fieldState }) => (
-                <SelectField label="Time" className="order-2 md:order-3">
-                  <TimePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    error={fieldState.error?.message}
-                  />
+                <SelectField
+                  label="Time"
+                  className="order-2 md:order-3"
+                  error={fieldState.error?.message}
+                >
+                  <TimePicker value={field.value} onChange={field.onChange} />
                 </SelectField>
               )}
             />
@@ -126,12 +132,12 @@ export const RentalInfo = ({
               control={control}
               name="dropOff.date"
               render={({ field, fieldState }) => (
-                <SelectField label="Date" className="order-3 md:order-2">
-                  <DatePicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    error={fieldState.error?.message}
-                  />
+                <SelectField
+                  label="Date"
+                  className="order-3 md:order-2"
+                  error={fieldState.error?.message}
+                >
+                  <DatePicker value={field.value} onChange={field.onChange} />
                 </SelectField>
               )}
             />
