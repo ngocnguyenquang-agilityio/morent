@@ -71,6 +71,10 @@ const carsFilterQuery = (
 
   const strapiFilters: Record<string, unknown> = {};
 
+  if (filters.name) {
+    strapiFilters.name = { $containsi: filters.name };
+  }
+
   if (filters.type && filters.type.length > 0) {
     strapiFilters.type = { $in: filters.type };
   }

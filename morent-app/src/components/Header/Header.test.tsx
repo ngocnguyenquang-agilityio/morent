@@ -4,6 +4,12 @@ import { render, screen } from '@testing-library/react';
 // Components
 import { Header } from './Header';
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: jest.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => '/',
+}));
+
 describe('Header', () => {
   it('renders the logo with a link to home', () => {
     render(<Header />);

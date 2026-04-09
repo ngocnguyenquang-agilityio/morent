@@ -94,6 +94,7 @@ export interface PaginationMeta {
 
 export interface GetCarsParams {
   filters?: {
+    name?: string;
     type?: string[];
     steering?: string;
     capacity?: number[];
