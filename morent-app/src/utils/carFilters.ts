@@ -10,11 +10,16 @@ import { CAPACITY_OPTIONS, MAX_PRICE_LIMIT } from '@/constants/filter';
 export const getFilterParams = (
   searchParams: URLSearchParams,
 ): GetCarsParams['filters'] => {
+  const nameParam = searchParams.get('name');
   const typeParam = searchParams.get('type');
   const capacityParam = searchParams.get('capacity');
   const maxPriceParam = searchParams.get('maxPrice');
 
   const filters: GetCarsParams['filters'] = {};
+
+  if (nameParam) {
+    filters.name = nameParam;
+  }
 
   if (typeParam) {
     const types = typeParam.split(',').filter(Boolean);

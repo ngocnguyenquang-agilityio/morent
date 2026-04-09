@@ -1,7 +1,9 @@
 'use client';
 
 // Lib
+import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // Components
 import {
@@ -21,12 +23,35 @@ import { ROUTE } from '@/constants/route';
 // Stores
 import { useFilterSidebarStore } from '@/stores/filterSidebar';
 
+// Hooks
+import { useDebounce } from '@/hooks/useDebounce';
+
 type HeaderProps = {
   onMenuClick?: () => void;
 };
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
+  const router = useRouter();
   const openFilter = useFilterSidebarStore((state) => state.open);
+  const [searchValue, setSearchValue] = useState('');
+
+  /** Navigates to the cars listing page with an optional `name` query param. */
+  const navigateWithSearch = (name: string) => {
+    const params = new URLSearchParams();
+    if (name) params.set('name', name);
+
+    const query = params.toString();
+    router.push(`${ROUTE.CARS}${query ? `?${query}` : ''}`);
+  };
+
+  const debouncedNavigate = useDebounce(navigateWithSearch);
+
+  /** Syncs the search input state and triggers a debounced navigation. */
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    debouncedNavigate(value);
+  };
 
   return (
     <header className="bg-white border-b border-secondary-100/40">
@@ -40,7 +65,11 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             MORENT
           </Link>
 
-          <SearchInput className="rounded-full px-5 py-2 w-full max-w-[492px] mx-8 xl:ml-16" />
+          <SearchInput
+            className="rounded-full px-5 py-2 w-full max-w-[492px] mx-8 xl:ml-16"
+            value={searchValue}
+            onChange={handleSearchChange}
+          />
         </div>
 
         <div className="flex items-center gap-4">
@@ -100,7 +129,11 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         </div>
 
         <div className="flex items-center gap-4 px-6 pb-6">
-          <SearchInput className="rounded-xl px-4 py-3 flex-1" />
+          <SearchInput
+            className="rounded-xl px-4 py-3 flex-1"
+            value={searchValue}
+            onChange={handleSearchChange}
+          />
           <Button
             type="button"
             variant="icon"
