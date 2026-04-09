@@ -76,6 +76,11 @@
       "type": "media",
       "multiple": true,
       "allowedTypes": ["images"]
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review"
     }
   }
 }

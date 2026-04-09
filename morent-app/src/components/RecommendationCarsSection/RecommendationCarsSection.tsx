@@ -1,6 +1,7 @@
 'use client';
 
 // Lib
+import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 // API
@@ -10,16 +11,31 @@ import { fetchRecommendationCars } from '@/services/cars';
 import { CarsApiResult } from '@/types/car';
 
 // Constants
+import { ROUTE } from '@/constants/route';
 import { CAR_KEYS } from '@/constants/queryKeys';
-import { DEFAULT_PAGE_SIZE } from '@/constants/car';
+import { DEFAULT_PAGE_SIZE, CAR_DETAILS_SECTIONS } from '@/constants/car';
+import { CAR_ERROR } from '@/constants/error';
 
 // Components
 import { CarCard } from '@/components/CarCard';
 import { Button } from '@/components/ui/Button';
 import { ErrorMessage } from '@/components/ErrorMessage';
 import { CarGridSkeleton } from '@/components/skeletons';
+import { SectionHeader } from '@/components/SectionHeader';
 
-export const RecommendationCarsSection = () => {
+interface RecommendationCarsSectionProps {
+  pageSize?: number;
+  gridCols?: 3 | 4;
+  isShowViewAll?: boolean;
+  label?: string;
+}
+
+export const RecommendationCarsSection = ({
+  pageSize = DEFAULT_PAGE_SIZE,
+  gridCols = 4,
+  isShowViewAll = false,
+  label = CAR_DETAILS_SECTIONS.RECOMMENDATION_CAR,
+}: RecommendationCarsSectionProps) => {
   const {
     data,
     fetchNextPage,
@@ -29,11 +45,11 @@ export const RecommendationCarsSection = () => {
     isError,
     refetch,
   } = useInfiniteQuery<CarsApiResult>({
-    queryKey: CAR_KEYS.RECOMMENDATION({ pageSize: DEFAULT_PAGE_SIZE }),
+    queryKey: CAR_KEYS.RECOMMENDATION({ pageSize }),
     queryFn: ({ pageParam }) =>
       fetchRecommendationCars({
         page: pageParam as number,
-        pageSize: DEFAULT_PAGE_SIZE,
+        pageSize,
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
@@ -42,57 +58,78 @@ export const RecommendationCarsSection = () => {
     },
   });
 
+  const handleFetchNextPage = () => fetchNextPage();
+
   const allCars = data?.pages.flatMap((page) => page.data) ?? [];
   const total = data?.pages[0]?.pagination.total ?? 0;
 
-  const handleRetry = () => refetch();
-  const handleFetchNextPage = () => fetchNextPage();
+  const gridColsClass = gridCols === 3 ? 'xl:grid-cols-3' : 'xl:grid-cols-4';
 
   const renderContent = () => {
     if (isLoading) {
-      return <CarGridSkeleton count={8} />;
+      return <CarGridSkeleton count={pageSize} />;
     }
 
     if (isError) {
       return (
         <ErrorMessage
-          message="Failed to load recommendation cars"
-          onRetry={handleRetry}
+          message={CAR_ERROR.FETCH_RECOMMENDATION}
+          onRetry={refetch}
         />
       );
     }
 
     return (
       <>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 xl:gap-8">
+        <div
+          className={`grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 ${gridColsClass} xl:gap-8`}
+        >
           {allCars.map((car, index) => (
-            <CarCard key={`rec-${index}`} car={car} />
+            <CarCard
+              key={`rec-${index}`}
+              car={car}
+              href={ROUTE.CAR_DETAILS(car.documentId)}
+            />
           ))}
         </div>
-        <div className="relative flex items-center justify-center mt-8 pb-4">
-          {hasNextPage && (
-            <Button
-              variant="default"
-              className="px-8 py-3 h-auto text-base font-semibold rounded-[10px]"
-              onClick={handleFetchNextPage}
-              disabled={isFetchingNextPage}
-            >
-              {isFetchingNextPage ? 'Loading...' : 'Show more car'}
-            </Button>
-          )}
-          <span className="absolute right-0 text-sm font-medium text-secondary-300">
-            {total} Cars
-          </span>
-        </div>
+        {!isShowViewAll && (
+          <div className="relative flex items-center justify-center mt-8 pb-4">
+            {hasNextPage && (
+              <Button
+                variant="default"
+                className="px-8 py-3 h-auto text-base font-semibold rounded-[10px]"
+                onClick={handleFetchNextPage}
+                disabled={isFetchingNextPage}
+              >
+                {isFetchingNextPage ? 'Loading...' : 'Show more car'}
+              </Button>
+            )}
+            <span className="absolute right-0 text-sm font-medium text-secondary-300">
+              {total} Cars
+            </span>
+          </div>
+        )}
       </>
     );
   };
 
   return (
     <section>
-      <h2 className="text-base font-semibold text-secondary-300 mb-5 px-5">
-        Recommendation Car
-      </h2>
+      {isShowViewAll ? (
+        <div className="mb-5 flex items-center justify-between">
+          <SectionHeader label={label} />
+          <Link
+            href={ROUTE.CARS}
+            className="text-base font-semibold text-primary-500 hover:underline"
+          >
+            {CAR_DETAILS_SECTIONS.VIEW_ALL}
+          </Link>
+        </div>
+      ) : (
+        <h2 className="text-base font-semibold text-secondary-300 mb-5 px-5">
+          {label}
+        </h2>
+      )}
       {renderContent()}
     </section>
   );

@@ -41,6 +41,17 @@ describe('PopularCarsSection', () => {
     expect(screen.getByText('Popular Car')).toBeInTheDocument();
   });
 
+  it('renders a custom label', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: mockData,
+      refetch: jest.fn(),
+    });
+    render(<PopularCarsSection label="Top Picks" />);
+    expect(screen.getByText('Top Picks')).toBeInTheDocument();
+  });
+
   it('renders skeleton cards while loading', () => {
     mockUseQuery.mockReturnValue({
       isLoading: true,
@@ -62,7 +73,9 @@ describe('PopularCarsSection', () => {
       refetch: jest.fn(),
     });
     render(<PopularCarsSection />);
-    expect(screen.getByText('Failed to load popular cars')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to fetch popular cars'),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Try again' }),
     ).toBeInTheDocument();
@@ -76,7 +89,9 @@ describe('PopularCarsSection', () => {
       refetch: jest.fn(),
     });
     render(<PopularCarsSection />);
-    expect(screen.getByText('Failed to load popular cars')).toBeInTheDocument();
+    expect(
+      screen.getByText('Failed to fetch popular cars'),
+    ).toBeInTheDocument();
   });
 
   it('renders car cards on success', () => {
@@ -88,6 +103,18 @@ describe('PopularCarsSection', () => {
     });
     render(<PopularCarsSection />);
     expect(screen.getByText('Koenigsegg')).toBeInTheDocument();
+  });
+
+  it('limits rendered cars to count prop', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: mockData,
+      refetch: jest.fn(),
+    });
+    render(<PopularCarsSection count={1} />);
+    expect(screen.getByText('Koenigsegg')).toBeInTheDocument();
+    expect(screen.queryByText('Rolls - Royce')).not.toBeInTheDocument();
   });
 
   it('shows "View All" link when data is loaded', () => {
@@ -103,7 +130,7 @@ describe('PopularCarsSection', () => {
     expect(link).toHaveAttribute('href', '/cars');
   });
 
-  it('hides "View All" link on error', () => {
+  it('shows "View All" link on error when isShowViewAll is true (default)', () => {
     mockUseQuery.mockReturnValue({
       isLoading: false,
       isError: true,
@@ -111,9 +138,53 @@ describe('PopularCarsSection', () => {
       refetch: jest.fn(),
     });
     render(<PopularCarsSection />);
+    expect(screen.getByRole('link', { name: 'View All' })).toBeInTheDocument();
+  });
+
+  it('hides "View All" link when isShowViewAll is false and no data', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: true,
+      data: undefined,
+      refetch: jest.fn(),
+    });
+    render(<PopularCarsSection isShowViewAll={false} />);
     expect(
       screen.queryByRole('link', { name: 'View All' }),
     ).not.toBeInTheDocument();
+  });
+
+  it('shows "View All" link when isShowViewAll is false but data is loaded', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: mockData,
+      refetch: jest.fn(),
+    });
+    render(<PopularCarsSection isShowViewAll={false} />);
+    expect(screen.getByRole('link', { name: 'View All' })).toBeInTheDocument();
+  });
+
+  it('applies 3-column grid when gridCols is 3', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: mockData,
+      refetch: jest.fn(),
+    });
+    const { container } = render(<PopularCarsSection gridCols={3} />);
+    expect(container.querySelector('.xl\\:grid-cols-3')).toBeInTheDocument();
+  });
+
+  it('applies 4-column grid by default', () => {
+    mockUseQuery.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: mockData,
+      refetch: jest.fn(),
+    });
+    const { container } = render(<PopularCarsSection />);
+    expect(container.querySelector('.xl\\:grid-cols-4')).toBeInTheDocument();
   });
 
   it('calls refetch when Try again is clicked', async () => {

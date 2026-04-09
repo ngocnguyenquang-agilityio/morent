@@ -108,23 +108,12 @@ describe('CarInfo', () => {
     expect(strikethrough).not.toBeInTheDocument();
   });
 
-  it('renders Rent Now button', () => {
+  it('renders Rent Now link pointing to the payment route', () => {
     render(<CarInfo car={baseCar} />);
 
-    expect(
-      screen.getByRole('button', { name: 'Rent Now' }),
-    ).toBeInTheDocument();
-  });
-
-  it('calls onRentNow when Rent Now button is clicked', async () => {
-    const user = userEvent.setup();
-    const onRentNow = jest.fn();
-
-    render(<CarInfo car={baseCar} onRentNow={onRentNow} />);
-
-    await user.click(screen.getByRole('button', { name: 'Rent Now' }));
-
-    expect(onRentNow).toHaveBeenCalledTimes(1);
+    const link = screen.getByRole('link', { name: 'Rent Now' });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', `/cars/${baseCar.documentId}/payment`);
   });
 
   it('shows unfavorited heart by default', () => {

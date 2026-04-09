@@ -24,6 +24,14 @@ export const CAR_PARAMS = {
   MAX_PRICE: 'maxPrice',
 };
 
+export const CAR_DETAILS_SECTIONS = {
+  RECENT_CAR: 'Recent Car',
+  RECOMMENDATION_CAR: 'Recommendation Car',
+  VIEW_ALL: 'View All',
+} as const;
+
+export const CAR_DETAILS_SECTION_SIZE = 3;
+
 export const POPULAR_CARS: Car[] = [
   {
     documentId: 'mock-koenigsegg',

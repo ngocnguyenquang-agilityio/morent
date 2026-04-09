@@ -2,6 +2,7 @@
 
 // Lib
 import Image from 'next/image';
+import Link from 'next/link';
 
 // Hooks
 import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
@@ -25,17 +26,26 @@ import { cn } from '@/lib/utils';
 
 interface CarCardProps {
   car: Car;
+  href?: string;
   onFavoriteToggle?: (favorite: boolean) => Promise<void>;
 }
 
-export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
+export const CarCard = ({ car, href, onFavoriteToggle }: CarCardProps) => {
   const { optimisticFavorite, handleFavoriteToggle } = useFavoriteToggle(
     car.favorite,
     onFavoriteToggle,
   );
 
   return (
-    <div className="mx-auto flex min-h-[240px] w-full flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:min-h-[388px] md:p-6">
+    <div className="relative mx-auto flex min-h-[240px] w-full flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:min-h-[388px] md:p-6">
+      {href && (
+        <Link
+          href={href}
+          className="absolute inset-0 rounded-xl"
+          aria-label={`View ${car.name} details`}
+        />
+      )}
+
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-bold text-secondary-900">{car.name}</h3>
@@ -48,7 +58,7 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
             optimisticFavorite ? 'Remove from favorites' : 'Add to favorites'
           }
           onClick={handleFavoriteToggle}
-          className="border-none"
+          className="relative z-10 border-none"
         >
           <HeartIcon
             className={cn('size-6 fill-none stroke-secondary-300', {
@@ -99,7 +109,7 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
             </p>
           )}
         </div>
-        <Button className="h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base">
+        <Button className="relative z-10 h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base">
           Rental Now
         </Button>
       </div>

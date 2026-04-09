@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review",
+    "description": "Car review left by a customer"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "title": { "type": "string", "required": true },
+    "avatar": { "type": "string", "required": true },
+    "date": { "type": "date", "required": true },
+    "rating": { "type": "integer", "required": true, "min": 1, "max": 5 },
+    "comment": { "type": "text", "required": true }
+  }
+}

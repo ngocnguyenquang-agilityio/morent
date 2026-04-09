@@ -8,11 +8,12 @@ export const ROUTE = {
   SIGN_UP: '/sign-up',
   CARS: '/cars',
   CAR_DETAILS: (id: string) => `/cars/${id}`,
-  PAYMENT: '/payment',
+  PAYMENT: (carId: string) => `/cars/${carId}/payment`,
   DASHBOARD: '/dashboard',
 };
 
 export const PATH = {
   CARS: '/api/cars',
   CARS_POPULAR: '/api/cars/popular',
+  CAR: (documentId: string) => `/api/cars/${documentId}`,
 };

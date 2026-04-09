@@ -459,6 +459,7 @@ export interface ApiCarCar extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     rate: Schema.Attribute.Decimal & Schema.Attribute.Required;
     reviewer: Schema.Attribute.Integer & Schema.Attribute.Required;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
     steering: Schema.Attribute.Enumeration<['Manual', 'Electric']> &
       Schema.Attribute.Required;
     subtitle: Schema.Attribute.String & Schema.Attribute.Required;
@@ -468,6 +469,48 @@ export interface ApiCarCar extends Struct.CollectionTypeSchema {
       ['Sport', 'SUV', 'MPV', 'Sedan', 'Coupe', 'Hatchback']
     > &
       Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiReviewReview extends Struct.CollectionTypeSchema {
+  collectionName: 'reviews';
+  info: {
+    description: 'Car review left by a customer';
+    displayName: 'Review';
+    pluralName: 'reviews';
+    singularName: 'review';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    avatar: Schema.Attribute.String & Schema.Attribute.Required;
+    comment: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    date: Schema.Attribute.Date & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::review.review'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      >;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -986,6 +1029,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::car.car': ApiCarCar;
+      'api::review.review': ApiReviewReview;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
