@@ -4,6 +4,7 @@ export * from './Checkbox';
 export * from './Calendar';
 export * from './Command';
 export * from './Dialog';
+export * from './DropdownMenu';
 export * from './Input';
 export * from './InputGroup';
 export * from './Popover';

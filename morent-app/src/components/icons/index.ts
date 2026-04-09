@@ -16,3 +16,5 @@ export * from './Star';
 export * from './People';
 export * from './Visa';
 export * from './ShieldCheck';
+export * from './SignIn';
+export * from './SignOut';
