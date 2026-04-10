@@ -4,8 +4,16 @@ import { PickAndDrop } from '@/components/PickAndDrop';
 import { RecommendationCarsSection } from '@/components/RecommendationCarsSection';
 import { PopularCarsSection } from '@/components/PopularCarsSection';
 
+// Utils
+import { createMetadata } from '@/utils/metadata';
+
 // Types
 import { HeroBannerVariant } from '@/types/car';
+
+export const metadata = createMetadata(
+  'Home',
+  'Browse popular and recommended rental cars. Find the perfect car for any trip.',
+);
 
 const HomePage = () => (
   <div className="px-6 py-8 space-y-8 lg:px-16 lg:py-10 max-w-screen-2xl mx-auto">
