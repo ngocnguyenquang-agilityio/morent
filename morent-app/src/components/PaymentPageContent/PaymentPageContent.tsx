@@ -1,7 +1,7 @@
 'use client';
 
 // Lib
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { effectTsResolver } from '@hookform/resolvers/effect-ts';
 
@@ -44,13 +44,17 @@ export const PaymentPageContent = ({ car }: PaymentPageContentProps) => {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const onSubmit = () => {
+  const handleSubmit = useCallback(() => {
     setShowConfirmation(true);
-  };
+  }, []);
+
+  const handleCloseConfirmation = useCallback(() => {
+    setShowConfirmation(false);
+  }, []);
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form onSubmit={methods.handleSubmit(handleSubmit)}>
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
             {/* Right column — rendered first so it appears on top on mobile */}
@@ -76,7 +80,7 @@ export const PaymentPageContent = ({ car }: PaymentPageContentProps) => {
         <RentalConfirmationDialog
           open={showConfirmation}
           carName={car.name}
-          onClose={() => setShowConfirmation(false)}
+          onClose={handleCloseConfirmation}
         />
       </form>
     </FormProvider>

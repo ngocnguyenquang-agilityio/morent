@@ -1,19 +1,19 @@
 // Components
-import { Skeleton } from '@/components/ui/Skeleton';
+import { Skeleton } from '@/components/ui';
 
 const PaymentLoading = () => (
-  <div className="container mx-auto px-4 py-8">
+  <div className="container mx-auto">
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
-      {/* Left column: 4 section skeletons */}
-      <div className="space-y-6 lg:space-y-8">
-        <Skeleton className="h-48 w-full rounded-[10px]" />
-        <Skeleton className="h-64 w-full rounded-[10px]" />
-        <Skeleton className="h-56 w-full rounded-[10px]" />
-        <Skeleton className="h-48 w-full rounded-[10px]" />
+      {/* Right column — rental summary skeleton */}
+      <div className="lg:col-start-2 lg:row-start-1">
+        <Skeleton className="h-[480px] w-full rounded-[10px]" />
       </div>
-      {/* Right column: RentalSummary skeleton */}
-      <div>
-        <Skeleton className="h-96 w-full rounded-[10px]" />
+      {/* Left column — form sections skeleton */}
+      <div className="space-y-6 lg:space-y-8 lg:col-start-1 lg:row-start-1">
+        <Skeleton className="h-[320px] w-full rounded-[10px]" />
+        <Skeleton className="h-[400px] w-full rounded-[10px]" />
+        <Skeleton className="h-[420px] w-full rounded-[10px]" />
+        <Skeleton className="h-[280px] w-full rounded-[10px]" />
       </div>
     </div>
   </div>
