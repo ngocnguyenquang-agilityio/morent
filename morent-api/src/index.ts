@@ -211,47 +211,116 @@ const SEED_REVIEWS_PER_CAR = [
   ],
 ];
 
+const SEED_RENTALS = [
+  {
+    pickUpLocation: 'New York',
+    pickUpDate: '2026-03-10',
+    pickUpTime: '09:00',
+    dropOffLocation: 'Boston',
+    dropOffDate: '2026-03-13',
+    dropOffTime: '17:00',
+    totalPrice: 280,
+  },
+  {
+    pickUpLocation: 'Los Angeles',
+    pickUpDate: '2026-03-15',
+    pickUpTime: '10:30',
+    dropOffLocation: 'San Francisco',
+    dropOffDate: '2026-03-18',
+    dropOffTime: '14:00',
+    totalPrice: 320,
+  },
+  {
+    pickUpLocation: 'Chicago',
+    pickUpDate: '2026-03-20',
+    pickUpTime: '08:00',
+    dropOffLocation: 'Detroit',
+    dropOffDate: '2026-03-22',
+    dropOffTime: '18:00',
+    totalPrice: 195,
+  },
+  {
+    pickUpLocation: 'Miami',
+    pickUpDate: '2026-03-25',
+    pickUpTime: '11:00',
+    dropOffLocation: 'Orlando',
+    dropOffDate: '2026-03-28',
+    dropOffTime: '15:30',
+    totalPrice: 240,
+  },
+  {
+    pickUpLocation: 'Seattle',
+    pickUpDate: '2026-04-01',
+    pickUpTime: '09:30',
+    dropOffLocation: 'Portland',
+    dropOffDate: '2026-04-04',
+    dropOffTime: '16:00',
+    totalPrice: 210,
+  },
+];
+
 export default {
   register(/* { strapi }: { strapi: Core.Strapi } */) {},
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    // Seed reviews
     const reviewCount = await strapi.db.query('api::review.review').count();
-    if (reviewCount > 0) return;
+    if (reviewCount === 0) {
+      // Fetch all unique car documents via their draft rows
+      const draftCars = await strapi.db.query('api::car.car').findMany({
+        where: { publishedAt: { $null: true } },
+      });
 
-    // Fetch all unique car documents via their draft rows
-    const draftCars = await strapi.db.query('api::car.car').findMany({
-      where: { publishedAt: { $null: true } },
-    });
-
-    if (draftCars.length === 0) return;
-
-    // Assign a review set to each unique document, updating all versions (draft + published)
-    await Promise.all(
-      draftCars.map(async (draftCar, index) => {
-        const reviewSet = SEED_REVIEWS_PER_CAR[index % SEED_REVIEWS_PER_CAR.length];
-
-        const createdReviews = await Promise.all(
-          reviewSet.map((data) =>
-            strapi.db.query('api::review.review').create({ data }),
-          ),
-        );
-
-        const reviewIds = createdReviews.map((r) => r.id);
-
-        // Update all rows for this document (draft + published) so admin and API both show reviews
-        const allVersions = await strapi.db.query('api::car.car').findMany({
-          where: { documentId: draftCar.documentId },
-        });
-
+      if (draftCars.length > 0) {
+        // Assign a review set to each unique document, updating all versions (draft + published)
         await Promise.all(
-          allVersions.map((version) =>
-            strapi.db.query('api::car.car').update({
-              where: { id: version.id },
-              data: { reviews: reviewIds },
-            }),
-          ),
+          draftCars.map(async (draftCar, index) => {
+            const reviewSet = SEED_REVIEWS_PER_CAR[index % SEED_REVIEWS_PER_CAR.length];
+
+            const createdReviews = await Promise.all(
+              reviewSet.map((data) =>
+                strapi.db.query('api::review.review').create({ data }),
+              ),
+            );
+
+            const reviewIds = createdReviews.map((r) => r.id);
+
+            // Update all rows for this document (draft + published) so admin and API both show reviews
+            const allVersions = await strapi.db.query('api::car.car').findMany({
+              where: { documentId: draftCar.documentId },
+            });
+
+            await Promise.all(
+              allVersions.map((version) =>
+                strapi.db.query('api::car.car').update({
+                  where: { id: version.id },
+                  data: { reviews: reviewIds },
+                }),
+              ),
+            );
+          }),
         );
-      }),
-    );
+      }
+    }
+
+    // Seed rentals
+    const rentalCount = await strapi.db.query('api::rental.rental').count();
+    if (rentalCount === 0) {
+      // Rental has no draftAndPublish — fetch published cars only
+      const publishedCars = await strapi.db.query('api::car.car').findMany({
+        where: { publishedAt: { $notNull: true } },
+      });
+
+      if (publishedCars.length > 0) {
+        await Promise.all(
+          SEED_RENTALS.map((rentalData, index) => {
+            const car = publishedCars[index % publishedCars.length];
+            return strapi.db.query('api::rental.rental').create({
+              data: { ...rentalData, car: car.id },
+            });
+          }),
+        );
+      }
+    }
   },
 };

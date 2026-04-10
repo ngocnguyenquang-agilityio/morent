@@ -32,7 +32,7 @@ export const TopCars = () => {
   const totalCar = CAR_DATA.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="bg-white rounded-lg p-4 lg:p-6 w-full max-w-[524px] space-y-4">
+    <div className="bg-white rounded-lg p-4 lg:p-6 w-full space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-base lg:text-lg font-bold text-secondary-500">
           Top 5 Car Rental

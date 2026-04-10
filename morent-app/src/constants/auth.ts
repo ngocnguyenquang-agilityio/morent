@@ -28,3 +28,7 @@ export const clerkAppearance = {
     identityPreviewEditButton: 'text-primary-500',
   },
 };
+
+export const ADMIN_ROLE_TYPE = 'admin';
+export const USER_ROLE_TYPE = 'user';
+export const USER_ROLE_COOKIE = 'user_role';

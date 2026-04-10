@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event';
 // Components
 import { RecentTransaction } from './RecentTransaction';
 
-// Constants
-import { RECENT_TRANSACTIONS, type Transaction } from '@/constants/transaction';
+// Types
+import { type Transaction } from '@/types/transaction';
 
 // Mock next/image to a plain img tag
 jest.mock('next/image', () => ({
@@ -61,11 +61,9 @@ describe('RecentTransaction', () => {
     expect(onViewAll).toHaveBeenCalledTimes(1);
   });
 
-  it('renders default transactions when no prop is provided', () => {
+  it('renders empty state when no transactions are provided', () => {
     render(<RecentTransaction />);
-    RECENT_TRANSACTIONS.forEach((t) => {
-      expect(screen.getByText(t.name)).toBeInTheDocument();
-    });
+    expect(screen.getByText('No recent transactions.')).toBeInTheDocument();
   });
 
   it('renders provided transactions', () => {

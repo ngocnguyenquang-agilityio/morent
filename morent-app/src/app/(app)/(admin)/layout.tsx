@@ -10,8 +10,7 @@ import { AdminLayoutContent } from '@/components/AdminLayoutContent/AdminLayoutC
 
 // Constants
 import { ROUTE } from '@/constants/route';
-
-const ADMIN_ROLE_TYPE = 'admin';
+import { ADMIN_ROLE_TYPE } from '@/constants/auth';
 
 const AdminLayout = async ({
   children,
