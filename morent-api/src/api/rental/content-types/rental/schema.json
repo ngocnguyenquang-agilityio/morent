@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rentals",
+  "info": {
+    "singularName": "rental",
+    "pluralName": "rentals",
+    "displayName": "Rental",
+    "description": "Car rental transaction"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "car": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::car.car"
+    },
+    "pickUpLocation": {
+      "type": "string",
+      "required": true
+    },
+    "pickUpDate": {
+      "type": "date",
+      "required": true
+    },
+    "pickUpTime": {
+      "type": "string",
+      "required": true
+    },
+    "dropOffLocation": {
+      "type": "string",
+      "required": true
+    },
+    "dropOffDate": {
+      "type": "date",
+      "required": true
+    },
+    "dropOffTime": {
+      "type": "string",
+      "required": true
+    },
+    "totalPrice": {
+      "type": "decimal",
+      "required": true
+    }
+  }
+}

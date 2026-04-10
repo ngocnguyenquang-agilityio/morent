@@ -9,3 +9,10 @@ export const CAR_KEYS = {
   DETAIL: (documentId: string) =>
     [...CAR_KEYS.ALL, 'detail', documentId] as const,
 };
+
+export const RENTAL_KEYS = {
+  ALL: ['rentals'] as const,
+  RECENT: () => [...RENTAL_KEYS.ALL, 'recent'] as const,
+
+  LATEST: () => [...RENTAL_KEYS.ALL, 'latest'] as const,
+};

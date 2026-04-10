@@ -475,6 +475,42 @@ export interface ApiCarCar extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiRentalRental extends Struct.CollectionTypeSchema {
+  collectionName: 'rentals';
+  info: {
+    description: 'Car rental transaction';
+    displayName: 'Rental';
+    pluralName: 'rentals';
+    singularName: 'rental';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    car: Schema.Attribute.Relation<'manyToOne', 'api::car.car'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    dropOffDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    dropOffLocation: Schema.Attribute.String & Schema.Attribute.Required;
+    dropOffTime: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::rental.rental'
+    > &
+      Schema.Attribute.Private;
+    pickUpDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    pickUpLocation: Schema.Attribute.String & Schema.Attribute.Required;
+    pickUpTime: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    totalPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiReviewReview extends Struct.CollectionTypeSchema {
   collectionName: 'reviews';
   info: {
@@ -1035,6 +1071,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::car.car': ApiCarCar;
+      'api::rental.rental': ApiRentalRental;
       'api::review.review': ApiReviewReview;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
