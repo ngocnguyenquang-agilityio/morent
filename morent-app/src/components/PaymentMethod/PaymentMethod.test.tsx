@@ -125,7 +125,7 @@ describe('PaymentMethod', () => {
 
   it('renders expiration date placeholder', () => {
     render(<Wrapper />);
-    expect(screen.getByPlaceholderText('DD / MM / YY')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('MM / YY')).toBeInTheDocument();
   });
 
   it('renders card holder placeholder', () => {
@@ -143,7 +143,7 @@ describe('PaymentMethod', () => {
     render(<Wrapper />);
     await user.type(screen.getByLabelText('Card Number'), '4111111111111111');
     expect(screen.getByLabelText('Card Number')).toHaveValue(
-      '4111111111111111',
+      '4111-1111-1111-1111',
     );
   });
 
@@ -157,8 +157,8 @@ describe('PaymentMethod', () => {
   it('allows typing into the expiration date field', async () => {
     const user = userEvent.setup();
     render(<Wrapper />);
-    await user.type(screen.getByLabelText('Expiration Date'), '12 / 26');
-    expect(screen.getByLabelText('Expiration Date')).toHaveValue('12 / 26');
+    await user.type(screen.getByLabelText('Expiration Date'), '1226');
+    expect(screen.getByLabelText('Expiration Date')).toHaveValue('12/26');
   });
 
   it('allows typing into the CVC field', async () => {
