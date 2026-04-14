@@ -1,7 +1,16 @@
 'use client';
 
 // Lib
+import { type ChangeEvent } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+
+// Utils
+import {
+  formatCardHolder,
+  formatCardNumber,
+  formatCvc,
+  formatExpirationDate,
+} from '@/utils/payment';
 
 // Components
 import { InputField } from '@/components/InputField';
@@ -23,6 +32,22 @@ interface PaymentMethodProps {
 
 export const PaymentMethod = ({ className }: PaymentMethodProps) => {
   const { control } = useFormContext<PaymentMethodFields>();
+
+  const fieldFormatters: Record<
+    keyof PaymentMethodFields,
+    (value: string) => string
+  > = {
+    cardNumber: formatCardNumber,
+    expirationDate: formatExpirationDate,
+    cardHolder: formatCardHolder,
+    cvc: formatCvc,
+  };
+
+  const handleChange =
+    (onChange: (value: string) => void, field: keyof PaymentMethodFields) =>
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onChange(fieldFormatters[field](e.target.value));
+    };
 
   return (
     <PaymentSection
@@ -49,6 +74,7 @@ export const PaymentMethod = ({ className }: PaymentMethodProps) => {
                   wrapperClassName="order-1"
                   error={fieldState.error?.message}
                   {...field}
+                  onChange={handleChange(field.onChange, 'cardNumber')}
                 />
               )}
             />
@@ -59,11 +85,12 @@ export const PaymentMethod = ({ className }: PaymentMethodProps) => {
                 <InputField
                   id="payment-expiration-date"
                   label="Expiration Date"
-                  placeholder="DD / MM / YY"
+                  placeholder="MM / YY"
                   className="bg-white"
                   wrapperClassName="order-3 md:order-2"
                   error={fieldState.error?.message}
                   {...field}
+                  onChange={handleChange(field.onChange, 'expirationDate')}
                 />
               )}
             />
@@ -79,6 +106,7 @@ export const PaymentMethod = ({ className }: PaymentMethodProps) => {
                   wrapperClassName="order-2 md:order-3"
                   error={fieldState.error?.message}
                   {...field}
+                  onChange={handleChange(field.onChange, 'cardHolder')}
                 />
               )}
             />
@@ -94,6 +122,7 @@ export const PaymentMethod = ({ className }: PaymentMethodProps) => {
                   wrapperClassName="order-4"
                   error={fieldState.error?.message}
                   {...field}
+                  onChange={handleChange(field.onChange, 'cvc')}
                 />
               )}
             />
