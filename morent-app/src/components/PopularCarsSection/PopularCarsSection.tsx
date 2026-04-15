@@ -59,11 +59,7 @@ export const PopularCarsSection = ({
     return (
       <div className={`grid ${GRID_COLS_CLASS[gridCols]}`}>
         {cars.map((car, index) => (
-          <CarCard
-            key={`popular-${index}`}
-            car={car}
-            href={ROUTE.CAR_DETAILS(car.documentId)}
-          />
+          <CarCard key={`popular-${index}`} car={car} />
         ))}
       </div>
     );

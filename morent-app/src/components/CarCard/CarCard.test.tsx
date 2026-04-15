@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { CarCard } from './CarCard';
 import type { Car } from '@/types/car';
+import { useFavoritesStore } from '@/stores/favorites';
 
 // Mock next/image to a plain img tag
 jest.mock('next/image', () => ({
@@ -67,6 +68,10 @@ const createFavoriteToggleMock = () => {
 };
 
 describe('CarCard', () => {
+  beforeEach(() => {
+    useFavoritesStore.setState({ overrides: {} });
+  });
+
   it('renders car info', () => {
     render(<CarCard car={baseCar} />);
 

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { CarInfo } from './CarInfo';
 import type { Car } from '@/types/car';
+import { useFavoritesStore } from '@/stores/favorites';
 
 const baseCar: Car = {
   documentId: 'mock-nissan-gt-r',
@@ -50,6 +51,10 @@ const createFavoriteToggleMock = () => {
 };
 
 describe('CarInfo', () => {
+  beforeEach(() => {
+    useFavoritesStore.setState({ overrides: {} });
+  });
+
   it('renders car name and description', () => {
     render(<CarInfo car={baseCar} />);
 

@@ -10,6 +10,9 @@ import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 // Utils
 import { formatPrice } from '@/utils/price';
 
+// Constants
+import { ROUTE } from '@/constants/route';
+
 // Components
 import { Button } from '@/components/ui/Button';
 import {
@@ -26,26 +29,23 @@ import { cn } from '@/lib/utils';
 
 interface CarCardProps {
   car: Car;
-  href?: string;
   onFavoriteToggle?: (favorite: boolean) => Promise<void>;
 }
 
-export const CarCard = ({ car, href, onFavoriteToggle }: CarCardProps) => {
-  const { optimisticFavorite, handleFavoriteToggle } = useFavoriteToggle(
+export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
+  const { isFavorite, handleFavoriteToggle } = useFavoriteToggle(
+    car.documentId,
     car.favorite,
     onFavoriteToggle,
   );
 
   return (
     <div className="relative mx-auto flex min-h-[240px] w-full flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:min-h-[388px] md:p-6">
-      {href && (
-        <Link
-          href={href}
-          className="absolute inset-0 rounded-xl"
-          aria-label={`View ${car.name} details`}
-        />
-      )}
-
+      <Link
+        href={ROUTE.CAR_DETAILS(car.documentId)}
+        aria-label={`View ${car.name} details`}
+        className="absolute inset-0 z-0 rounded-xl"
+      />
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-bold text-secondary-900">{car.name}</h3>
@@ -54,22 +54,20 @@ export const CarCard = ({ car, href, onFavoriteToggle }: CarCardProps) => {
         <Button
           variant="icon"
           size="icon"
-          aria-label={
-            optimisticFavorite ? 'Remove from favorites' : 'Add to favorites'
-          }
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           onClick={handleFavoriteToggle}
           className="relative z-10 border-none"
         >
           <HeartIcon
             className={cn('size-6 fill-none stroke-secondary-300', {
-              'fill-[#ED3F3F] stroke-[#ED3F3F]': optimisticFavorite,
+              'fill-[#ED3F3F] stroke-[#ED3F3F]': isFavorite,
             })}
           />
         </Button>
       </div>
 
       <div className="my-2 flex flex-1 flex-row items-center md:my-8 md:flex-col md:gap-8">
-        <div className="relative flex-1 pr-4 md:w-full md:pr-0">
+        <div className="flex-1 pr-4 md:w-full md:pr-0">
           <Image
             src={car.image}
             alt={car.name}
@@ -109,8 +107,11 @@ export const CarCard = ({ car, href, onFavoriteToggle }: CarCardProps) => {
             </p>
           )}
         </div>
-        <Button className="relative z-10 h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base">
-          Rental Now
+        <Button
+          asChild
+          className="relative z-10 h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base"
+        >
+          <Link href={ROUTE.PAYMENT(car.documentId)}>Rental Now</Link>
         </Button>
       </div>
     </div>
