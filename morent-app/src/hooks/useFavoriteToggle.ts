@@ -1,28 +1,31 @@
-import { useOptimistic, useTransition } from 'react';
+import { useFavoritesStore } from '@/stores/favorites';
 
 export const useFavoriteToggle = (
-  favorite: boolean,
+  documentId: string,
+  serverFavorite: boolean,
   onFavoriteToggle?: (favorite: boolean) => Promise<void>,
 ) => {
-  const [optimisticFavorite, setOptimisticFavorite] = useOptimistic(
-    favorite,
-    (_current: boolean, next: boolean) => next,
-  );
-  const [, startTransition] = useTransition();
+  const overrides = useFavoritesStore((state) => state.overrides);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+  const currentFavorite =
+    documentId in overrides ? overrides[documentId] : serverFavorite;
 
-  const handleFavoriteToggle = () => {
-    const next = !optimisticFavorite;
+  const handleFavoriteToggle = async () => {
+    const next = !currentFavorite;
 
-    startTransition(async () => {
-      setOptimisticFavorite(next);
+    toggleFavorite(documentId, next);
 
-      try {
-        await onFavoriteToggle?.(next);
-      } catch (error) {
-        console.error('Failed to toggle favorite status:', error);
-      }
-    });
+    if (!onFavoriteToggle) {
+      return;
+    }
+
+    try {
+      await onFavoriteToggle(next);
+    } catch (error) {
+      toggleFavorite(documentId, !next);
+      console.error('Failed to toggle favorite status:', error);
+    }
   };
 
-  return { optimisticFavorite, handleFavoriteToggle };
+  return { isFavorite: currentFavorite, handleFavoriteToggle };
 };

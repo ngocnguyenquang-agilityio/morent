@@ -27,7 +27,8 @@ interface CarInfoProps {
 }
 
 export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
-  const { optimisticFavorite, handleFavoriteToggle } = useFavoriteToggle(
+  const { isFavorite, handleFavoriteToggle } = useFavoriteToggle(
+    car.documentId,
     car.favorite,
     onFavoriteToggle,
   );
@@ -55,16 +56,14 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
               variant="icon"
               size="icon"
               aria-label={
-                optimisticFavorite
-                  ? 'Remove from favorites'
-                  : 'Add to favorites'
+                isFavorite ? 'Remove from favorites' : 'Add to favorites'
               }
               onClick={handleFavoriteToggle}
               className="shrink-0 border-none"
             >
               <HeartIcon
                 className={cn('size-6 fill-none stroke-secondary-300', {
-                  'fill-[#ED3F3F] stroke-[#ED3F3F]': optimisticFavorite,
+                  'fill-[#ED3F3F] stroke-[#ED3F3F]': isFavorite,
                 })}
               />
             </Button>

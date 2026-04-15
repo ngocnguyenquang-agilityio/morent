@@ -85,11 +85,7 @@ export const RecommendationCarsSection = ({
           className={`grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 ${gridColsClass} xl:gap-8`}
         >
           {allCars.map((car, index) => (
-            <CarCard
-              key={`rec-${index}`}
-              car={car}
-              href={ROUTE.CAR_DETAILS(car.documentId)}
-            />
+            <CarCard key={`rec-${index}`} car={car} />
           ))}
         </div>
         {!isShowViewAll && (
