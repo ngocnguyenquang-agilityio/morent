@@ -1,3 +1,7 @@
+export const SEARCH_PARAMS = {
+  NAME: 'name',
+} as const;
+
 export const TYPE_OPTIONS = [
   { label: 'Sport', count: 10 },
   { label: 'SUV', count: 12 },

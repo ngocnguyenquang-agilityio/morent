@@ -12,6 +12,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 // Constants
 import { DEFAULT_MAX_PRICE, MAX_PRICE_LIMIT } from '@/constants/filter';
 import { CAR_PARAMS } from '@/constants/car';
+import { ROUTE } from '@/constants/route';
 
 // Utils
 import { getCapacityLabels, getCapacityValues } from '@/utils/carFilters';
@@ -51,6 +52,8 @@ const CarsLayoutContent = ({
     (value) => Number(value) || DEFAULT_MAX_PRICE,
   );
 
+  const isCarListPage = pathname === ROUTE.CARS;
+
   const applyFilters = (filters: FilterState) => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -68,7 +71,8 @@ const CarsLayoutContent = ({
       params.delete(CAR_PARAMS.MAX_PRICE);
     }
 
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const targetPath = isCarListPage ? pathname : ROUTE.CARS;
+    router.replace(`${targetPath}?${params.toString()}`);
   };
 
   const handleFiltersChange = useDebounce<FilterState>(applyFilters);

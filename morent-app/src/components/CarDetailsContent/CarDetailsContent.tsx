@@ -1,3 +1,6 @@
+// Lib
+import { Suspense } from 'react';
+
 // Constants
 import {
   CAR_DETAILS_SECTIONS,
@@ -9,6 +12,7 @@ import { CarInfo } from '@/components/CarInfo';
 import { Reviews } from '@/components/Reviews';
 import { PopularCarsSection } from '@/components/PopularCarsSection';
 import { RecommendationCarsSection } from '@/components/RecommendationCarsSection';
+import { CarGridSkeleton, CarInfoSkeleton } from '@/components/skeletons';
 
 // Types
 import type { Car } from '@/types/car';
@@ -20,18 +24,24 @@ interface CarDetailsContentProps {
 export const CarDetailsContent = ({ car }: CarDetailsContentProps) => {
   return (
     <div className="flex flex-col gap-8">
-      <CarInfo car={car} />
+      <Suspense fallback={<CarInfoSkeleton />}>
+        <CarInfo car={car} />
+      </Suspense>
       <Reviews reviews={car.reviews} totalCount={car.reviews.length} />
-      <PopularCarsSection
-        label={CAR_DETAILS_SECTIONS.RECENT_CAR}
-        count={CAR_DETAILS_SECTION_SIZE}
-        gridCols={3}
-      />
-      <RecommendationCarsSection
-        pageSize={CAR_DETAILS_SECTION_SIZE}
-        gridCols={3}
-        isShowViewAll
-      />
+      <Suspense fallback={<CarGridSkeleton count={CAR_DETAILS_SECTION_SIZE} />}>
+        <PopularCarsSection
+          label={CAR_DETAILS_SECTIONS.RECENT_CAR}
+          count={CAR_DETAILS_SECTION_SIZE}
+          gridCols={3}
+        />
+      </Suspense>
+      <Suspense fallback={<CarGridSkeleton count={CAR_DETAILS_SECTION_SIZE} />}>
+        <RecommendationCarsSection
+          pageSize={CAR_DETAILS_SECTION_SIZE}
+          gridCols={3}
+          isShowViewAll
+        />
+      </Suspense>
     </div>
   );
 };
