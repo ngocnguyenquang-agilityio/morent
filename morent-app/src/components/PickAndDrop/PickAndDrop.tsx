@@ -1,7 +1,8 @@
 'use client';
 
 // Lib
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 // Components
 import { Button } from '@/components/ui/Button';
@@ -9,6 +10,10 @@ import { PickDropSection } from '@/components/PickDropSection';
 
 // Utils
 import { cn } from '@/lib/utils';
+import {
+  deserializePickDropFromParams,
+  serializePickDropToParams,
+} from '@/utils/pickAndDrop';
 
 // Icons
 import { ArrowDownUpIcon } from 'lucide-react';
@@ -28,51 +33,52 @@ interface PickAndDropProps {
   className?: string;
 }
 
-const INITIAL_VALUES: SectionValues = {
-  location: undefined,
-  date: undefined,
-  time: undefined,
-};
-
 export const PickAndDrop = ({
   locations = DEFAULT_LOCATIONS,
   onChange,
   className,
 }: PickAndDropProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [values, setValues] = useState<{
     pickUp: SectionValues;
     dropOff: SectionValues;
-  }>({ pickUp: INITIAL_VALUES, dropOff: INITIAL_VALUES });
+  }>(() => deserializePickDropFromParams(searchParams));
 
-  const handlePickUpChange = useCallback(
-    (pickUp: SectionValues) => {
-      setValues((prev) => {
-        const next = { ...prev, pickUp };
-        onChange?.(next);
-        return next;
-      });
-    },
-    [onChange],
-  );
+  const syncToUrl = (next: {
+    pickUp: SectionValues;
+    dropOff: SectionValues;
+  }) => {
+    const params = serializePickDropToParams(
+      next.pickUp,
+      next.dropOff,
+      new URLSearchParams(searchParams.toString()),
+    );
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
-  const handleDropOffChange = useCallback(
-    (dropOff: SectionValues) => {
-      setValues((prev) => {
-        const next = { ...prev, dropOff };
-        onChange?.(next);
-        return next;
-      });
-    },
-    [onChange],
-  );
+  const handlePickUpChange = (pickUp: SectionValues) => {
+    const next = { ...values, pickUp };
+    setValues(next);
+    onChange?.(next);
+    syncToUrl(next);
+  };
 
-  const handleSwap = useCallback(() => {
-    setValues((prev) => {
-      const next = { pickUp: prev.dropOff, dropOff: prev.pickUp };
-      onChange?.(next);
-      return next;
-    });
-  }, [onChange]);
+  const handleDropOffChange = (dropOff: SectionValues) => {
+    const next = { ...values, dropOff };
+    setValues(next);
+    onChange?.(next);
+    syncToUrl(next);
+  };
+
+  const handleSwap = () => {
+    const next = { pickUp: values.dropOff, dropOff: values.pickUp };
+    setValues(next);
+    onChange?.(next);
+    syncToUrl(next);
+  };
 
   return (
     <div

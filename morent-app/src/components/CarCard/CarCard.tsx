@@ -3,12 +3,15 @@
 // Lib
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useAuth } from '@clerk/nextjs';
 
 // Hooks
 import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 
 // Utils
 import { formatPrice } from '@/utils/price';
+import { extractPickDropParams } from '@/utils/pickAndDrop';
 
 // Constants
 import { ROUTE } from '@/constants/route';
@@ -38,11 +41,22 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
     car.favorite,
     onFavoriteToggle,
   );
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pickDropParams = extractPickDropParams(searchParams);
+  const pickDropQuery = pickDropParams.toString();
+  const detailsUrl = pickDropQuery
+    ? `${ROUTE.CAR_DETAILS(car.documentId)}?${pickDropQuery}`
+    : ROUTE.CAR_DETAILS(car.documentId);
+  const paymentUrl = pickDropQuery
+    ? `${ROUTE.PAYMENT(car.documentId)}?${pickDropQuery}`
+    : ROUTE.PAYMENT(car.documentId);
 
   return (
     <div className="relative mx-auto flex min-h-[240px] w-full flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:min-h-[388px] md:p-6">
       <Link
-        href={ROUTE.CAR_DETAILS(car.documentId)}
+        href={detailsUrl}
         aria-label={`View ${car.name} details`}
         className="absolute inset-0 z-0 rounded-xl"
       />
@@ -111,7 +125,19 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
           asChild
           className="relative z-10 h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base"
         >
-          <Link href={ROUTE.PAYMENT(car.documentId)}>Rental Now</Link>
+          <Link
+            href={paymentUrl}
+            onClick={(e) => {
+              if (isLoaded && !isSignedIn) {
+                e.preventDefault();
+                router.push(
+                  ROUTE.SIGN_IN_REDIRECT(encodeURIComponent(paymentUrl)),
+                );
+              }
+            }}
+          >
+            Rental Now
+          </Link>
         </Button>
       </div>
     </div>

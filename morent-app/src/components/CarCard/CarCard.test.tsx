@@ -5,6 +5,15 @@ import { CarCard } from './CarCard';
 import type { Car } from '@/types/car';
 import { useFavoritesStore } from '@/stores/favorites';
 
+jest.mock('next/navigation', () => ({
+  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: jest.fn() }),
+}));
+
+jest.mock('@clerk/nextjs', () => ({
+  useAuth: () => ({ isSignedIn: false, isLoaded: true }),
+}));
+
 // Mock next/image to a plain img tag
 jest.mock('next/image', () => ({
   __esModule: true,

@@ -3,9 +3,13 @@
 // Lib
 import Link from 'next/link';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 
 // API
 import { fetchRecommendationCars } from '@/services/cars';
+
+// Utils
+import { extractPickDropParams } from '@/utils/pickAndDrop';
 
 // Types
 import { CarsApiResult } from '@/types/car';
@@ -36,6 +40,10 @@ export const RecommendationCarsSection = ({
   isShowViewAll = false,
   label = CAR_DETAILS_SECTIONS.RECOMMENDATION_CAR,
 }: RecommendationCarsSectionProps) => {
+  const searchParams = useSearchParams();
+  const pickDropQuery = extractPickDropParams(searchParams).toString();
+  const carsUrl = pickDropQuery ? `${ROUTE.CARS}?${pickDropQuery}` : ROUTE.CARS;
+
   const {
     data,
     fetchNextPage,
@@ -115,7 +123,7 @@ export const RecommendationCarsSection = ({
         <div className="mb-5 flex items-center justify-between">
           <SectionHeader label={label} />
           <Link
-            href={ROUTE.CARS}
+            href={carsUrl}
             className="text-base font-semibold text-primary-500 hover:underline"
           >
             {CAR_DETAILS_SECTIONS.VIEW_ALL}

@@ -1,7 +1,6 @@
 // Components
 import { HeroBanner } from '@/components/HeroBanner';
-import { PickAndDrop } from '@/components/PickAndDrop';
-import { CarCardSkeleton } from '@/components/skeletons';
+import { CarCardSkeleton, PickAndDropSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui';
 
@@ -32,7 +31,7 @@ const HomePageLoading = () => (
     </section>
 
     {/* Pick and Drop */}
-    <PickAndDrop />
+    <PickAndDropSkeleton />
 
     {/* Popular Cars */}
     <section>

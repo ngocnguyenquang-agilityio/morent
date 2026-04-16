@@ -10,6 +10,7 @@ export const ROUTE = {
   CAR_DETAILS: (id: string) => `/cars/${id}`,
   PAYMENT: (carId: string) => `/cars/${carId}/payment`,
   DASHBOARD: '/dashboard',
+  SIGN_IN_REDIRECT: (params: string) => `/sign-in?redirect_url=${params}`,
 };
 
 export const PATH = {
