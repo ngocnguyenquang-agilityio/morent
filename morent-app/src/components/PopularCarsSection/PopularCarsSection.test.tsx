@@ -22,6 +22,15 @@ jest.mock('next/image', () => ({
   },
 }));
 
+jest.mock('next/navigation', () => ({
+  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: jest.fn() }),
+}));
+
+jest.mock('@clerk/nextjs', () => ({
+  useAuth: () => ({ isSignedIn: false, isLoaded: true }),
+}));
+
 const mockUseQuery = useQuery as jest.Mock;
 
 const mockData = {

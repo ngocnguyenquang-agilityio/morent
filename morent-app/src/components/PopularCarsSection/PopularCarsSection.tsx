@@ -3,9 +3,13 @@
 // Lib
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 
 // API
 import { fetchPopularCars } from '@/services/cars';
+
+// Utils
+import { extractPickDropParams } from '@/utils/pickAndDrop';
 
 // Constants
 import { ROUTE } from '@/constants/route';
@@ -36,6 +40,10 @@ export const PopularCarsSection = ({
   gridCols = 4,
   isShowViewAll = true,
 }: PopularCarsSectionProps) => {
+  const searchParams = useSearchParams();
+  const pickDropQuery = extractPickDropParams(searchParams).toString();
+  const carsUrl = pickDropQuery ? `${ROUTE.CARS}?${pickDropQuery}` : ROUTE.CARS;
+
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: CAR_KEYS.POPULAR(),
     queryFn: fetchPopularCars,
@@ -73,7 +81,7 @@ export const PopularCarsSection = ({
         <h2 className="text-base font-semibold text-secondary-300">{label}</h2>
         {showViewAll && (
           <Link
-            href={ROUTE.CARS}
+            href={carsUrl}
             className="text-base font-semibold text-primary-500 hover:underline"
           >
             {CAR_DETAILS_SECTIONS.VIEW_ALL}

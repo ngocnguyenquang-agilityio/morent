@@ -1,11 +1,15 @@
 'use client';
 
+// Lib
+import { useSearchParams } from 'next/navigation';
+
 // Hooks
 import { useFavoriteToggle } from '@/hooks/useFavoriteToggle';
 
 // Utils
 import { formatPrice } from '@/utils/price';
 import { cn } from '@/lib/utils';
+import { extractPickDropParams } from '@/utils/pickAndDrop';
 
 // Constants
 import { ROUTE } from '@/constants/route';
@@ -32,6 +36,12 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
     car.favorite,
     onFavoriteToggle,
   );
+  const searchParams = useSearchParams();
+  const pickDropParams = extractPickDropParams(searchParams);
+  const pickDropQuery = pickDropParams.toString();
+  const paymentUrl = pickDropQuery
+    ? `${ROUTE.PAYMENT(car.documentId)}?${pickDropQuery}`
+    : ROUTE.PAYMENT(car.documentId);
 
   const fullStars = Math.floor(car.rate);
 
@@ -115,7 +125,7 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
             )}
           </div>
           <Button asChild className="h-auto px-8 py-4 text-base">
-            <Link href={ROUTE.PAYMENT(car.documentId)}>Rent Now</Link>
+            <Link href={paymentUrl}>Rent Now</Link>
           </Button>
         </div>
       </div>

@@ -1,8 +1,12 @@
+// Lib
+import { Suspense } from 'react';
+
 // Components
 import { HeroBanner } from '@/components/HeroBanner';
 import { PickAndDrop } from '@/components/PickAndDrop';
 import { RecommendationCarsSection } from '@/components/RecommendationCarsSection';
 import { PopularCarsSection } from '@/components/PopularCarsSection';
+import { PickAndDropSkeleton, CarGridSkeleton } from '@/components/skeletons';
 
 // Utils
 import { createMetadata } from '@/utils/metadata';
@@ -36,13 +40,19 @@ const HomePage = () => (
     </section>
 
     {/* Pick and Drop */}
-    <PickAndDrop />
+    <Suspense fallback={<PickAndDropSkeleton />}>
+      <PickAndDrop />
+    </Suspense>
 
     {/* Popular Cars */}
-    <PopularCarsSection />
+    <Suspense fallback={<CarGridSkeleton count={4} />}>
+      <PopularCarsSection />
+    </Suspense>
 
     {/* Recommendation Cars */}
-    <RecommendationCarsSection />
+    <Suspense fallback={<CarGridSkeleton count={8} />}>
+      <RecommendationCarsSection />
+    </Suspense>
   </div>
 );
 

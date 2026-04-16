@@ -5,6 +5,10 @@ import { CarInfo } from './CarInfo';
 import type { Car } from '@/types/car';
 import { useFavoritesStore } from '@/stores/favorites';
 
+jest.mock('next/navigation', () => ({
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 const baseCar: Car = {
   documentId: 'mock-nissan-gt-r',
   name: 'Nissan GT - R',

@@ -5,6 +5,12 @@ import userEvent from '@testing-library/user-event';
 // Components
 import { PickAndDrop } from './PickAndDrop';
 
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: jest.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => '/',
+}));
+
 describe('PickAndDrop', () => {
   beforeEach(() => {
     jest.clearAllMocks();

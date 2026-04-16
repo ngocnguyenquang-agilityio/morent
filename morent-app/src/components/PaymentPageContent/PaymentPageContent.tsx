@@ -1,7 +1,7 @@
 'use client';
 
 // Lib
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { effectTsResolver } from '@hookform/resolvers/effect-ts';
 
@@ -10,6 +10,9 @@ import { Car } from '@/types/car';
 
 // Schemas
 import { PaymentFormSchema, PaymentFormValues } from '@/types/payment';
+
+// Utils
+import { getPickDropDefaultValues } from '@/utils/pickAndDrop';
 
 // Components
 import { BillingInfo } from '@/components/BillingInfo/BillingInfo';
@@ -21,14 +24,19 @@ import { RentalConfirmationDialog } from '@/components/RentalConfirmationDialog/
 
 interface PaymentPageContentProps {
   car: Car;
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
-export const PaymentPageContent = ({ car }: PaymentPageContentProps) => {
+export const PaymentPageContent = ({
+  car,
+  searchParams,
+}: PaymentPageContentProps) => {
+  const { pickUp, dropOff } = getPickDropDefaultValues(searchParams ?? {});
   const methods = useForm<PaymentFormValues>({
     resolver: effectTsResolver(PaymentFormSchema),
     defaultValues: {
-      pickUp: { location: '', date: undefined, time: '' },
-      dropOff: { location: '', date: undefined, time: '' },
+      pickUp,
+      dropOff,
       name: '',
       address: '',
       phoneNumber: '',
@@ -44,17 +52,17 @@ export const PaymentPageContent = ({ car }: PaymentPageContentProps) => {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = () => {
     setShowConfirmation(true);
-  }, []);
+  };
 
-  const handleCloseConfirmation = useCallback(() => {
+  const handleCloseConfirmation = () => {
     setShowConfirmation(false);
-  }, []);
+  };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(handleSubmit)}>
+      <form onSubmit={methods.handleSubmit(handleSubmit)} className="p-8">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
             {/* Right column — rendered first so it appears on top on mobile */}

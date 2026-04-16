@@ -73,6 +73,12 @@ const CarsLayoutContent = ({
 
   const handleFiltersChange = useDebounce<FilterState>(applyFilters);
 
+  const isPaymentPage = pathname.endsWith('/payment');
+
+  if (isPaymentPage) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="flex">
       {/* Mobile filter overlay */}
