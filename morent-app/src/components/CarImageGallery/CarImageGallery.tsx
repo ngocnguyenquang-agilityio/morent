@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/Button';
 export interface CarImageGalleryProps {
   title: string;
   subtitle: string;
+  mainImage: string;
   thumbnails: readonly string[];
   className?: string;
 }
@@ -20,10 +21,12 @@ export interface CarImageGalleryProps {
 export const CarImageGallery = ({
   title,
   subtitle,
+  mainImage,
   thumbnails,
   className,
 }: CarImageGalleryProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const images = [mainImage, ...thumbnails];
 
   return (
     <div className={cn('flex flex-col gap-6 w-full', className)}>
@@ -46,7 +49,7 @@ export const CarImageGallery = ({
           </div>
 
           <Image
-            src={thumbnails[0]}
+            src={mainImage}
             alt={title}
             width={492}
             height={280}
@@ -56,7 +59,7 @@ export const CarImageGallery = ({
       ) : (
         <div className="relative min-h-[360px] overflow-hidden rounded-[10px]">
           <Image
-            src={thumbnails[selectedIndex]}
+            src={images[selectedIndex]}
             alt={title}
             fill
             className="object-cover"
@@ -65,7 +68,7 @@ export const CarImageGallery = ({
       )}
 
       <div className="grid grid-cols-3 gap-5">
-        {thumbnails.map((thumb, i) => {
+        {images.map((thumb, i) => {
           const isSelected = i === selectedIndex;
           const viewLabel = `${title} view ${i + 1}`;
 

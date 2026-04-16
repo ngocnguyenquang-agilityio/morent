@@ -15,11 +15,8 @@ const meta = {
     title: 'Sports car with the best design and acceleration',
     subtitle:
       'Safety and comfort while driving a futuristic and elegant sports car',
-    thumbnails: [
-      '/images/hero-car.png',
-      '/images/hero-car-2.png',
-      '/images/hero-car.png',
-    ],
+    mainImage: '/Koenigsegg.svg',
+    thumbnails: ['/images/hero-car.png', '/images/hero-car-2.png'],
   },
 } satisfies Meta<typeof CarImageGallery>;
 

@@ -55,6 +55,7 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
       <CarImageGallery
         title={car.title}
         subtitle={car.subtitle}
+        mainImage={car.image}
         thumbnails={car.thumbnails}
       />
 

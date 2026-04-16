@@ -184,13 +184,13 @@ describe('CarInfo', () => {
     expect(screen.getByText(baseCar.subtitle)).toBeInTheDocument();
   });
 
-  it('renders 3 thumbnail buttons', () => {
+  it('renders 4 view buttons (main image + 3 thumbnails)', () => {
     render(<CarInfo car={baseCar} />);
 
     const thumbnailButtons = screen.getAllByRole('button', {
       name: /view \d+/,
     });
-    expect(thumbnailButtons).toHaveLength(3);
+    expect(thumbnailButtons).toHaveLength(4);
   });
 
   it('hides title and subtitle when a non-first thumbnail is clicked', () => {

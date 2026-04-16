@@ -5,15 +5,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CarImageGallery } from './CarImageGallery';
 
 const defaultProps = {
-  heroImage: '/images/hero-car.png',
+  mainImage: '/images/hero-car.png',
   title: 'Sports car with the best design and acceleration',
   subtitle:
     'Safety and comfort while driving a futuristic and elegant sports car',
-  thumbnails: [
-    '/images/car-thumb-1.png',
-    '/images/car-thumb-2.png',
-    '/images/car-thumb-3.png',
-  ],
+  thumbnails: ['/images/car-thumb-1.png', '/images/car-thumb-2.png'],
 };
 
 describe('CarImageGallery', () => {
