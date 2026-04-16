@@ -3,7 +3,7 @@
 // Lib
 import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser, useClerk } from '@clerk/nextjs';
 
 // Components
@@ -28,6 +28,7 @@ import {
 
 // Constants
 import { ROUTE } from '@/constants/route';
+import { SEARCH_PARAMS } from '@/constants/filter';
 
 // Stores
 import { useFilterSidebarStore } from '@/stores/filterSidebar';
@@ -41,15 +42,20 @@ type HeaderProps = {
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isSignedIn } = useUser();
   const { signOut } = useClerk();
   const openFilter = useFilterSidebarStore((state) => state.open);
   const [searchValue, setSearchValue] = useState('');
 
-  /** Navigates to the cars listing page with an optional `name` query param. */
+  /** Navigates to the cars listing page with an optional `name` query param, preserving existing search params. */
   const navigateWithSearch = (name: string) => {
-    const params = new URLSearchParams();
-    if (name) params.set('name', name);
+    const params = new URLSearchParams(searchParams.toString());
+    if (name) {
+      params.set(SEARCH_PARAMS.NAME, name);
+    } else {
+      params.delete(SEARCH_PARAMS.NAME);
+    }
 
     const query = params.toString();
     router.push(`${ROUTE.CARS}${query ? `?${query}` : ''}`);

@@ -4,9 +4,11 @@ import {
   dehydrate,
   HydrationBoundary,
 } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
 // Components
 import { CarsList } from '@/components/CarList';
+import { CarGridSkeleton } from '@/components/skeletons';
 
 // API
 import { fetchCars } from '@/services/cars';
@@ -48,7 +50,9 @@ export const CarsPageContent = async ({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CarsList />
+      <Suspense fallback={<CarGridSkeleton count={DEFAULT_PAGE_SIZE} />}>
+        <CarsList />
+      </Suspense>
     </HydrationBoundary>
   );
 };
