@@ -1,6 +1,8 @@
 export const MAX_CARD_NUMBER_DIGITS = 16;
 export const MAX_EXPIRATION_DATE_DIGITS = 4;
 export const MAX_CVC_DIGITS = 3;
+export const MIN_PHONE_NUMBER_DIGITS = 8;
+export const MAX_PHONE_NUMBER_DIGITS = 10;
 
 export const PAYMENT_MESSAGES = {
   PICK_UP_LOCATION_REQUIRED: 'Pick-up location is required',
@@ -13,6 +15,7 @@ export const PAYMENT_MESSAGES = {
   NAME_MIN_LENGTH: 'Name must be at least 2 characters',
   ADDRESS_REQUIRED: 'Address is required',
   PHONE_NUMBER_REQUIRED: 'Phone number is required',
+  PHONE_NUMBER_INVALID: 'Phone number must be between 8 and 10 digits',
   CITY_REQUIRED: 'City is required',
   CARD_NUMBER_REQUIRED: 'Card number is required',
   CARD_NUMBER_INVALID: 'Card number must be 16 digits',
@@ -31,6 +34,7 @@ export const PAYMENT_PATTERNS = {
   CARD_HOLDER: /^[a-zA-Z\s]+$/,
   EXPIRATION_DATE: /^(0[1-9]|1[0-2])\/\d{2}$/,
   CVC: /^\d{3}$/,
+  PHONE_NUMBER: /^\d{8,10}$/,
   NON_DIGIT: /\D/g,
   CARD_NUMBER_GROUP: /(\d{4})(?=\d)/g,
   NON_LETTER_NON_SPACE: /[^a-zA-Z\s]/g,

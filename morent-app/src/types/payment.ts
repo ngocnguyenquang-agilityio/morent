@@ -36,7 +36,11 @@ export const PaymentFormSchema = Schema.Struct({
     }),
   ),
   address: nonEmptyString(PAYMENT_MESSAGES.ADDRESS_REQUIRED),
-  phoneNumber: nonEmptyString(PAYMENT_MESSAGES.PHONE_NUMBER_REQUIRED),
+  phoneNumber: nonEmptyString(PAYMENT_MESSAGES.PHONE_NUMBER_REQUIRED).pipe(
+    Schema.pattern(PAYMENT_PATTERNS.PHONE_NUMBER, {
+      message: () => PAYMENT_MESSAGES.PHONE_NUMBER_INVALID,
+    }),
+  ),
   city: nonEmptyString(PAYMENT_MESSAGES.CITY_REQUIRED),
   // Payment
   cardNumber: nonEmptyString(PAYMENT_MESSAGES.CARD_NUMBER_REQUIRED).pipe(

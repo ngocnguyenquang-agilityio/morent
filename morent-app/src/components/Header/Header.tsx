@@ -3,7 +3,7 @@
 // Lib
 import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useUser, useClerk } from '@clerk/nextjs';
 
 // Components
@@ -42,6 +42,7 @@ type HeaderProps = {
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { user, isSignedIn } = useUser();
   const { signOut } = useClerk();
@@ -190,15 +191,17 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             value={searchValue}
             onChange={handleSearchChange}
           />
-          <Button
-            type="button"
-            variant="icon"
-            size="icon-xl"
-            icon={FilterIcon}
-            aria-label="Filter"
-            className="rounded-lg"
-            onClick={openFilter}
-          />
+          {pathname.startsWith(ROUTE.CARS) && (
+            <Button
+              type="button"
+              variant="icon"
+              size="icon-xl"
+              icon={FilterIcon}
+              aria-label="Filter"
+              className="rounded-lg"
+              onClick={openFilter}
+            />
+          )}
         </div>
       </div>
     </header>

@@ -1,11 +1,21 @@
 'use client';
 
 // Lib
+import { ChangeEvent } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+
+// Constants
+import { MAX_PHONE_NUMBER_DIGITS, PAYMENT_PATTERNS } from '@/constants/payment';
 
 // Components
 import { InputField } from '@/components/InputField';
 import { PaymentSection } from '@/components/PaymentSection';
+
+const formatPhoneNumber = (digits: string): string => {
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+  return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+};
 
 export interface BillingInfoFields {
   name: string;
@@ -65,17 +75,28 @@ export const BillingInfo = ({ className }: BillingInfoProps) => {
           <Controller
             control={control}
             name="phoneNumber"
-            render={({ field, fieldState }) => (
-              <InputField
-                id="billing-phone"
-                label="Phone Number"
-                type="tel"
-                placeholder="Phone number"
-                wrapperClassName="order-3 md:order-2"
-                error={fieldState.error?.message}
-                {...field}
-              />
-            )}
+            render={({ field, fieldState }) => {
+              const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+                const numericOnly = e.target.value
+                  .replace(PAYMENT_PATTERNS.NON_DIGIT, '')
+                  .slice(0, MAX_PHONE_NUMBER_DIGITS);
+                field.onChange(numericOnly);
+              };
+
+              return (
+                <InputField
+                  id="billing-phone"
+                  label="Phone Number"
+                  type="tel"
+                  placeholder="Phone number"
+                  wrapperClassName="order-3 md:order-2"
+                  error={fieldState.error?.message}
+                  {...field}
+                  value={formatPhoneNumber(field.value ?? '')}
+                  onChange={handlePhoneChange}
+                />
+              );
+            }}
           />
           <Controller
             control={control}
