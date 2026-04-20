@@ -47,7 +47,16 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
   const { user, isSignedIn } = useUser();
   const { signOut } = useClerk();
   const openFilter = useFilterSidebarStore((state) => state.open);
-  const [searchValue, setSearchValue] = useState('');
+  const [prevSearchParams, setPrevSearchParams] = useState(searchParams);
+
+  const searchValueInitial = searchParams.get(SEARCH_PARAMS.NAME) ?? '';
+
+  const [searchValue, setSearchValue] = useState(searchValueInitial);
+
+  if (prevSearchParams !== searchParams) {
+    setPrevSearchParams(searchParams);
+    setSearchValue(searchValueInitial);
+  }
 
   /** Navigates to the cars listing page with an optional `name` query param, preserving existing search params. */
   const navigateWithSearch = (name: string) => {
