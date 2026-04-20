@@ -32,7 +32,7 @@ export const PaymentPageContent = ({
   searchParams,
 }: PaymentPageContentProps) => {
   const { pickUp, dropOff } = getPickDropDefaultValues(searchParams ?? {});
-  const methods = useForm<PaymentFormValues>({
+  const form = useForm<PaymentFormValues>({
     resolver: effectTsResolver(PaymentFormSchema),
     defaultValues: {
       pickUp,
@@ -61,8 +61,8 @@ export const PaymentPageContent = ({
   };
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(handleSubmit)} className="p-8">
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="p-8">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
             {/* Right column — rendered first so it appears on top on mobile */}

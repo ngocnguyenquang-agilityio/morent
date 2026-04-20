@@ -3,6 +3,9 @@
 // Lib
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
+// Utils
+import { isFilledDeep } from '@/utils/payment';
+
 // Components
 import { Button, Checkbox } from '@/components/ui';
 import { PaymentSection } from '@/components/PaymentSection';
@@ -18,8 +21,10 @@ interface ConfirmationProps {
 }
 
 export const Confirmation = ({ className }: ConfirmationProps) => {
-  const { control } = useFormContext<ConfirmationFields>();
-  const agreeTerms = useWatch({ control, name: 'agreeTerms' });
+  const { control } = useFormContext();
+  const values = useWatch({ control });
+
+  const isFormFilled = isFilledDeep(values);
 
   return (
     <PaymentSection
@@ -71,7 +76,7 @@ export const Confirmation = ({ className }: ConfirmationProps) => {
       <div className="space-y-8 mt-6 lg:mt-8">
         <Button
           type="submit"
-          disabled={!agreeTerms}
+          disabled={!isFormFilled || !values.agreeTerms}
           className="w-fit rounded-[10px] px-8 py-6 text-base font-semibold"
         >
           Rent Now
