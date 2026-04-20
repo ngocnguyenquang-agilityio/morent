@@ -48,3 +48,22 @@ export const formatCardHolder = (value: string): string =>
  */
 export const formatCvc = (value: string): string =>
   value.replace(PAYMENT_PATTERNS.NON_DIGIT, '').slice(0, MAX_CVC_DIGITS);
+
+/**
+ * Recursively checks that a value is non-empty.
+ * - Rejects null, undefined, and empty strings.
+ * - For Date objects, returns true only if the date is valid (not NaN).
+ * - For plain objects, returns true only if all nested values pass this check.
+ * - All other primitives (non-empty string, number, boolean) are considered filled.
+ */
+export const isFilledDeep = (value: unknown): boolean => {
+  if (value === null || value === undefined || value === '') return false;
+  if (value instanceof Date) return !isNaN(value.getTime());
+
+  if (typeof value === 'object') {
+    const vals = Object.values(value);
+    return vals.length > 0 && vals.every(isFilledDeep);
+  }
+
+  return true;
+};

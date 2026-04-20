@@ -2,6 +2,7 @@ export * from './Bitcoin';
 export * from './ChevronDown';
 export * from './ChevronUp';
 export * from './Check';
+export * from './CircleCheck';
 export * from './Filter';
 export * from './Heart';
 export * from './Menu';

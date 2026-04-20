@@ -1,8 +1,5 @@
 'use client';
 
-// Lib
-import { CheckCircle2 } from 'lucide-react';
-
 // Components
 import {
   Dialog,
@@ -12,6 +9,7 @@ import {
   DialogDescription,
 } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui';
+import { CircleCheckIcon } from '@/components/icons';
 
 interface RentalConfirmationDialogProps {
   open: boolean;
@@ -30,19 +28,22 @@ export const RentalConfirmationDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-sm text-center">
+      <DialogContent className="max-w-sm p-6 gap-6 text-center">
         <DialogHeader>
-          <div className="flex justify-center mb-4">
-            <CheckCircle2 className="size-16 text-green-500" />
+          <div className="flex justify-center">
+            <CircleCheckIcon className="size-18 fill-green-500" />
           </div>
-          <DialogTitle className="text-xl font-bold text-secondary">
-            Booking Confirmed!
+          <DialogTitle className="text-lg font-bold text-secondary">
+            Successfully
           </DialogTitle>
-          <DialogDescription className="mt-2 text-secondary-300">
-            Your {carName} has been successfully rented. Enjoy the ride!
+          <DialogDescription className="text-xs lg:text-sm text-secondary-300">
+            Your {carName} has been rented successfully. Enjoy the ride!
           </DialogDescription>
         </DialogHeader>
-        <Button onClick={onClose} className="mt-4 w-full rounded-[10px]">
+        <Button
+          onClick={onClose}
+          className="w-full rounded-[10px] px-8 py-6 text-base font-semibold"
+        >
           Done
         </Button>
       </DialogContent>
