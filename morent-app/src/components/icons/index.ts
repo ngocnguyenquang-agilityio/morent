@@ -1,5 +1,7 @@
 export * from './Bitcoin';
+export * from './ChevronBackward';
 export * from './ChevronDown';
+export * from './ChevronForward';
 export * from './ChevronUp';
 export * from './Check';
 export * from './CircleCheck';

@@ -13,22 +13,36 @@ import {
   USER_ROLE_COOKIE,
 } from '@/constants/auth';
 
+const PROTECTED_ROUTES = [ROUTE.RENTED_LIST];
+
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
 
-  // Signed-out path: clear role cookie if present
+  // Signed-out path: clear role cookie if present, redirect from protected routes
   if (!userId) {
     if (req.cookies.has(USER_ROLE_COOKIE)) {
       const res = NextResponse.next();
       res.cookies.delete(USER_ROLE_COOKIE);
       return res;
     }
+
+    const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
+      req.nextUrl.pathname.startsWith(route),
+    );
+
+    if (isProtectedRoute) {
+      const signInRedirectPath = ROUTE.SIGN_IN_REDIRECT(req.nextUrl.pathname);
+      const signInUrl = new URL(signInRedirectPath, req.url);
+      return NextResponse.redirect(signInUrl);
+    }
+
     return;
   }
 
   // Cookie already set: use cached role to redirect if needed
   if (req.cookies.has(USER_ROLE_COOKIE)) {
     const cachedRole = req.cookies.get(USER_ROLE_COOKIE)?.value;
+
     if (
       cachedRole === ADMIN_ROLE_TYPE &&
       !req.nextUrl.pathname.startsWith(ROUTE.DASHBOARD)

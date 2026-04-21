@@ -30,20 +30,29 @@ const resolveLocationValue = (apiLocation: string): string => {
   return byLabel?.value ?? apiLocation;
 };
 
-export const mapRentalToDetails = (rental: Rental) => ({
-  image: rental.car.image,
-  name: rental.car.name,
-  type: rental.car.type,
-  rentalId: rental.documentId.slice(0, 4),
-  pickUp: {
-    location: resolveLocationValue(rental.pickUpLocation),
-    date: new Date(rental.pickUpDate),
-    time: rental.pickUpTime,
-  },
-  dropOff: {
-    location: resolveLocationValue(rental.dropOffLocation),
-    date: new Date(rental.dropOffDate),
-    time: rental.dropOffTime,
-  },
-  totalPrice: rental.totalPrice,
-});
+export const getSelectedRental = (
+  rentals: Rental[],
+  selectedId: string | undefined,
+): Rental | undefined =>
+  rentals.find((r) => r.documentId === selectedId) ?? rentals[0];
+
+export const mapRentalToDetails = (rental: Rental | undefined) => {
+  if (!rental) return undefined;
+  return {
+    image: rental.car.image,
+    name: rental.car.name,
+    type: rental.car.type,
+    rentalId: rental.documentId.slice(0, 4),
+    pickUp: {
+      location: resolveLocationValue(rental.pickUpLocation),
+      date: new Date(rental.pickUpDate),
+      time: rental.pickUpTime,
+    },
+    dropOff: {
+      location: resolveLocationValue(rental.dropOffLocation),
+      date: new Date(rental.dropOffDate),
+      time: rental.dropOffTime,
+    },
+    totalPrice: rental.totalPrice,
+  };
+};
