@@ -32,14 +32,14 @@ export const CarDetailsContent = ({ car }: CarDetailsContentProps) => {
         <PopularCarsSection
           label={CAR_DETAILS_SECTIONS.RECENT_CAR}
           count={CAR_DETAILS_SECTION_SIZE}
-          gridCols={4}
+          gridCols={3}
           mobileLayout="scroll"
         />
       </Suspense>
       <Suspense fallback={<CarGridSkeleton count={CAR_DETAILS_SECTION_SIZE} />}>
         <RecommendationCarsSection
           pageSize={CAR_DETAILS_SECTION_SIZE}
-          gridCols={4}
+          gridCols={3}
           mobileLayout="scroll"
           isShowViewAll
         />

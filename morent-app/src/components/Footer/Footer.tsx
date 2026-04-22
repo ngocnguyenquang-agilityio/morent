@@ -23,7 +23,7 @@ export const Footer = () => {
           <div className="lg:max-w-[292px]">
             <Link
               href={ROUTE.HOME}
-              className="text-primary text-2xl lg:text-xl font-bold leading-none tracking-tight"
+              className="text-primary text-[24px] lg:text-xl font-bold leading-none tracking-tight"
             >
               MORENT
             </Link>
@@ -43,7 +43,7 @@ export const Footer = () => {
                   title === 'Community' && 'order-1 lg:order-none col-span-2',
                 )}
               >
-                <h3 className="text-xl lg:text-lg font-semibold text-secondary-500 lg:text-secondary mb-4 lg:mb-6">
+                <h3 className="text-lg font-semibold text-secondary mb-4 lg:mb-6">
                   {title}
                 </h3>
                 <ul className="space-y-3 lg:space-y-4">

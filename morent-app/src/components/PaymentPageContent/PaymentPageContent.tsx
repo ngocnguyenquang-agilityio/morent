@@ -98,8 +98,8 @@ export const PaymentPageContent = ({
         className="p-8"
         aria-busy={isPending}
       >
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
+        <div className="">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,852px)_1fr]">
             {/* Right column — rendered first so it appears on top on mobile */}
             <div className="lg:col-start-2 lg:row-start-1 lg:sticky lg:top-8 lg:self-start">
               <RentalSummary

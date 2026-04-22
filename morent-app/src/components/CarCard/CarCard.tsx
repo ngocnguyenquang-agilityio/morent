@@ -62,7 +62,7 @@ export const CarCard = ({
   return (
     <div
       className={cn(
-        'relative mx-auto p-4 lg:p-6 flex w-full flex-col justify-between rounded-xl bg-white shadow-sm gap-8',
+        'relative mx-auto p-4 lg:p-6 flex w-full flex-1 flex-col rounded-xl bg-white shadow-sm gap-4',
         // isCompact ? 'min-h-[240px]' : 'min-h-[388px]',
       )}
     >
@@ -95,15 +95,17 @@ export const CarCard = ({
 
       <div
         className={cn(
-          'flex items-center gap-8 justify-between',
-          isCompactMode ? 'my-2 flex-row sm:my-0 sm:flex-col' : 'flex-col',
+          'flex gap-4',
+          isCompactMode
+            ? 'my-2 flex-row items-center sm:my-0 sm:flex-col flex-1'
+            : 'flex-col',
         )}
       >
         <div
           className={
             isCompactMode
               ? 'flex-1 pr-4 sm:flex-none sm:pr-0 sm:w-full'
-              : 'w-full'
+              : 'w-full flex items-center justify-center'
           }
         >
           <Image
@@ -128,26 +130,26 @@ export const CarCard = ({
         >
           <div className="flex items-center gap-1.5">
             <GasStationIcon className="size-4" />
-            <span className="text-xs lg:text-sm text-secondary-300">
+            <span className="text-xs lg:text-sm text-secondary-300 whitespace-nowrap">
               {car.gasoline}L
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <SteeringIcon className="size-4" />
-            <span className="text-xs lg:text-sm text-secondary-300">
+            <span className="text-xs lg:text-sm text-secondary-300 whitespace-nowrap">
               {car.steering}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <PeopleIcon className="size-4" />
-            <span className="text-xs lg:text-sm text-secondary-300">
+            <span className="text-xs lg:text-sm text-secondary-300 whitespace-nowrap">
               {car.capacity} People
             </span>
           </div>
         </div>
       </div>
 
-      <div className={cn('flex items-center justify-between gap-2')}>
+      <div className={cn('flex items-center justify-between gap-2 mt-auto')}>
         <div className="flex flex-col">
           <p className="text-base lg:text-lg font-bold text-secondary">
             ${formatPrice(car.price, car.discount)}

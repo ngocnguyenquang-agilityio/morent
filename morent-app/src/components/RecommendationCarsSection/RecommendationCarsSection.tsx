@@ -112,8 +112,8 @@ export const RecommendationCarsSection = ({
               key={`rec-${index}`}
               className={
                 mobileLayout === 'scroll'
-                  ? 'max-w-[320px] shrink-0 sm:w-auto'
-                  : ''
+                  ? 'max-w-[320px] shrink-0 sm:max-w-none sm:min-w-0 flex flex-col'
+                  : 'flex flex-col'
               }
             >
               <CarCard car={car} isCompactMode={isCompactMode} />
