@@ -2,15 +2,15 @@
 
 // Lib
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Components
 import { DetailsRental } from '@/components/DetailsRental';
 import { RentedList } from '@/components/RentedList';
 
-// Constants
-import { MOCK_RENTALS, RENTAL_PAGE_SIZE } from '@/constants/rental';
-
 // Types
+import type { Rental } from '@/types/rental';
+import type { PaginationMeta } from '@/types/car';
 import type { Transaction } from '@/types/transaction';
 
 // Utils
@@ -19,29 +19,50 @@ import {
   mapRentalToDetails,
   mapRentalToTransaction,
 } from '@/utils/rental';
-import { getPageItems, getTotalPages } from '@/utils/pagination';
+import { mergeSearchParams } from '@/utils/searchParams';
 
-export const RentedListClient = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+// Constants
+import { ROUTE } from '@/constants/route';
+import { DEFAULT_PAGE, RENTAL_SEARCH_PARAMS } from '@/constants/rental';
+
+type Props = {
+  rentals: ReadonlyArray<Rental>;
+  pagination: PaginationMeta;
+};
+
+export const RentedListClient = ({ rentals, pagination }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentPage = Math.max(
+    DEFAULT_PAGE,
+    Number(searchParams.get(RENTAL_SEARCH_PARAMS.PAGE)) || DEFAULT_PAGE,
+  );
+
   const [selectedRentalId, setSelectedRentalId] = useState<string | undefined>(
     undefined,
   );
+
+  const effectiveSelectedId =
+    selectedRentalId !== undefined &&
+    rentals.some((r) => r.documentId === selectedRentalId)
+      ? selectedRentalId
+      : rentals[0]?.documentId;
 
   const handleSelectTransaction = (transaction: Transaction) => {
     setSelectedRentalId(transaction.id);
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    setSelectedRentalId(undefined);
+    const params = mergeSearchParams(searchParams, { page });
+    router.push(`${ROUTE.RENTED_LIST}?${params.toString()}`);
   };
 
-  const totalPages = getTotalPages(MOCK_RENTALS.length, RENTAL_PAGE_SIZE);
-  const pageRentals = getPageItems(MOCK_RENTALS, currentPage, RENTAL_PAGE_SIZE);
-  const selectedRental = getSelectedRental(pageRentals, selectedRentalId);
+  const selectedRental = getSelectedRental(
+    rentals as Rental[],
+    effectiveSelectedId,
+  );
   const rentalDetails = mapRentalToDetails(selectedRental);
-
-  const transactions = pageRentals.map(mapRentalToTransaction);
+  const transactions = (rentals as Rental[]).map(mapRentalToTransaction);
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 w-full">
@@ -49,9 +70,9 @@ export const RentedListClient = () => {
         transactions={transactions}
         isLoading={false}
         onSelect={handleSelectTransaction}
-        selectedId={selectedRentalId ?? pageRentals[0]?.documentId}
+        selectedId={effectiveSelectedId}
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={pagination.pageCount}
         onPageChange={handlePageChange}
       />
       <DetailsRental isLoading={false} {...rentalDetails} className="w-full" />

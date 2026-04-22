@@ -2,6 +2,11 @@
 import { Rental } from '@/types/rental';
 
 export const RENTAL_PAGE_SIZE = 7;
+export const DEFAULT_PAGE = 1;
+
+export const RENTAL_SEARCH_PARAMS = {
+  PAGE: 'page',
+} as const;
 
 export const MOCK_RENTALS: Rental[] = [
   {

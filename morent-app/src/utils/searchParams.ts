@@ -33,3 +33,18 @@ export const toURLSearchParams = (
         Array.isArray(value) ? value[0] : value,
       ]),
   );
+
+export const mergeSearchParams = (
+  base: { toString(): string },
+  overrides: Record<string, string | number | null | undefined>,
+): URLSearchParams => {
+  const merged = new URLSearchParams(base.toString());
+  for (const [key, value] of Object.entries(overrides)) {
+    if (value === null || value === undefined) {
+      merged.delete(key);
+    } else {
+      merged.set(key, String(value));
+    }
+  }
+  return merged;
+};

@@ -15,12 +15,14 @@ interface RentalConfirmationDialogProps {
   open: boolean;
   carName: string;
   onClose: () => void;
+  onDone: () => void;
 }
 
 export const RentalConfirmationDialog = ({
   open,
   carName,
   onClose,
+  onDone,
 }: RentalConfirmationDialogProps) => {
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) onClose();
@@ -41,7 +43,7 @@ export const RentalConfirmationDialog = ({
           </DialogDescription>
         </DialogHeader>
         <Button
-          onClick={onClose}
+          onClick={onDone}
           className="w-full rounded-[10px] px-8 py-6 text-base font-semibold"
         >
           Done

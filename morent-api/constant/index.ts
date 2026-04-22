@@ -55,4 +55,5 @@ export const ENV_DEFAULTS = {
 export const PAGE_SIZE_DEFAULTS = {
   POPULAR: 4,
   RECOMMENDATION: 8,
+  MY_RENTALS: 10,
 };

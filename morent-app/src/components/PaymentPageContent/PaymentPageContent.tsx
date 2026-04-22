@@ -2,6 +2,8 @@
 
 // Lib
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 import { useForm, FormProvider } from 'react-hook-form';
 import { effectTsResolver } from '@hookform/resolvers/effect-ts';
 
@@ -10,6 +12,12 @@ import { Car } from '@/types/car';
 
 // Schemas
 import { PaymentFormSchema, PaymentFormValues } from '@/types/payment';
+
+// Services
+import { submitRental } from '@/services/rentals';
+
+// Constants
+import { ROUTE } from '@/constants/route';
 
 // Utils
 import { getPickDropDefaultValues } from '@/utils/pickAndDrop';
@@ -50,19 +58,46 @@ export const PaymentPageContent = ({
     },
   });
 
+  const router = useRouter();
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const handleSubmit = () => {
-    setShowConfirmation(true);
+  const {
+    mutate,
+    error: rentalError,
+    isPending,
+  } = useMutation({
+    mutationFn: submitRental,
+    onSuccess: () => setShowConfirmation(true),
+  });
+
+  const handleSubmit = (values: PaymentFormValues) => {
+    mutate({
+      carDocumentId: car.documentId,
+      carPrice: car.price,
+      pickUpLocation: values.pickUp.location,
+      pickUpDate: values.pickUp.date.toISOString(),
+      pickUpTime: values.pickUp.time,
+      dropOffLocation: values.dropOff.location,
+      dropOffDate: values.dropOff.date.toISOString(),
+      dropOffTime: values.dropOff.time,
+    });
   };
 
   const handleCloseConfirmation = () => {
     setShowConfirmation(false);
   };
 
+  const handleClickDone = () => {
+    router.push(ROUTE.RENTED_LIST);
+  };
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="p-8">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="p-8"
+        aria-busy={isPending}
+      >
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
             {/* Right column — rendered first so it appears on top on mobile */}
@@ -85,10 +120,16 @@ export const PaymentPageContent = ({
             </div>
           </div>
         </div>
+        {rentalError && (
+          <p className="mt-4 text-center text-sm text-red-500">
+            {rentalError.message}
+          </p>
+        )}
         <RentalConfirmationDialog
           open={showConfirmation}
           carName={car.name}
           onClose={handleCloseConfirmation}
+          onDone={handleClickDone}
         />
       </form>
     </FormProvider>
