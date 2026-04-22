@@ -2,6 +2,7 @@
 
 // Lib
 import Image from 'next/image';
+import { ClipboardList } from 'lucide-react';
 
 // Components
 import { PickDropSection } from '@/components/PickDropSection';
@@ -51,7 +52,17 @@ export const DetailsRental = ({
     if (isLoading) return <DetailsRentalSkeleton />;
     if (isEmpty)
       return (
-        <p className="text-sm text-secondary-300">No rental details yet.</p>
+        <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
+          <ClipboardList className="size-12 text-secondary-200" />
+          <div className="space-y-1">
+            <p className="text-sm font-semibold text-secondary-500">
+              No rental selected
+            </p>
+            <p className="text-sm text-secondary-300">
+              Select a rental from the list to view its details.
+            </p>
+          </div>
+        </div>
       );
 
     return (

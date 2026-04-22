@@ -13,7 +13,8 @@ export const CAR_ERROR = {
 
 export const RENTAL_ERROR = {
   FETCH_RECENT: 'Failed to fetch recent rentals',
-
   FETCH_LATEST: 'Failed to fetch latest rental',
+  FETCH_MY_RENTALS: 'Failed to fetch your rentals',
   PARSE_RESPONSE: 'Failed to parse rental data from server',
+  CREATE_RENTAL: 'Failed to create rental',
 } as const;

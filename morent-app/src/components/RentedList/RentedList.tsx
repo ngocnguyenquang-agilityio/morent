@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { RecentTransactionSkeleton } from '@/components/skeletons';
 import { Pagination } from '@/components/Pagination';
+import { RentedListEmpty } from './RentedListEmpty';
 
 // Utils
 import { cn } from '@/lib/utils';
@@ -41,12 +42,7 @@ export const RentedList = ({
   const renderContent = () => {
     if (isLoading) return <RecentTransactionSkeleton />;
 
-    if (!transactions.length)
-      return (
-        <p className="text-sm text-secondary-300 py-4">
-          No recent transactions.
-        </p>
-      );
+    if (!transactions.length) return <RentedListEmpty />;
 
     return (
       <ul className="flex flex-col w-full">
@@ -103,13 +99,18 @@ export const RentedList = ({
   };
 
   return (
-    <div className={cn('bg-white rounded-[10px] p-4 lg:p-6 w-full', className)}>
+    <div
+      className={cn(
+        'flex flex-col bg-white rounded-[10px] p-4 lg:p-6 w-full',
+        className,
+      )}
+    >
       <h2 className="text-base lg:text-lg font-bold text-secondary-500 mb-6 lg:mb-8">
         Rented List
       </h2>
-      {renderContent()}
+      <div className="flex-1 min-h-[557px]">{renderContent()}</div>
       {!isLoading && !!transactions.length && (
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-6">
           <Pagination
             page={currentPage}
             pageCount={totalPages}
