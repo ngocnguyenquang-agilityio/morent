@@ -27,11 +27,23 @@ import { ErrorMessage } from '@/components/ErrorMessage';
 import { CarGridSkeleton } from '@/components/skeletons';
 import { SectionHeader } from '@/components/SectionHeader';
 
+const GRID_COLS_CLASS = {
+  3: 'grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 xl:gap-8',
+  4: 'grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8',
+} as const;
+
+const SCROLL_COLS_CLASS = {
+  3: 'flex overflow-x-auto gap-5 pb-4 sm:grid sm:overflow-visible sm:grid-cols-2 xl:grid-cols-3 xl:gap-8',
+  4: 'flex overflow-x-auto gap-5 pb-4 sm:grid sm:overflow-visible sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 xl:grid-cols-4 xl:gap-8',
+} as const;
+
 interface RecommendationCarsSectionProps {
   pageSize?: number;
-  gridCols?: 3 | 4;
+  gridCols?: keyof typeof GRID_COLS_CLASS;
   isShowViewAll?: boolean;
   label?: string;
+  mobileLayout?: 'grid' | 'scroll';
+  isCompactMode?: boolean;
 }
 
 export const RecommendationCarsSection = ({
@@ -39,6 +51,8 @@ export const RecommendationCarsSection = ({
   gridCols = 4,
   isShowViewAll = false,
   label = CAR_DETAILS_SECTIONS.RECOMMENDATION_CAR,
+  mobileLayout = 'grid',
+  isCompactMode = false,
 }: RecommendationCarsSectionProps) => {
   const searchParams = useSearchParams();
   const pickDropQuery = extractPickDropParams(searchParams).toString();
@@ -71,8 +85,6 @@ export const RecommendationCarsSection = ({
   const allCars = data?.pages.flatMap((page) => page.data) ?? [];
   const total = data?.pages[0]?.pagination.total ?? 0;
 
-  const gridColsClass = gridCols === 3 ? 'xl:grid-cols-3' : 'xl:grid-cols-4';
-
   const renderContent = () => {
     if (isLoading) {
       return <CarGridSkeleton count={pageSize} />;
@@ -87,13 +99,25 @@ export const RecommendationCarsSection = ({
       );
     }
 
+    const containerClass =
+      mobileLayout === 'scroll'
+        ? SCROLL_COLS_CLASS[gridCols]
+        : `grid ${GRID_COLS_CLASS[gridCols]}`;
+
     return (
       <>
-        <div
-          className={`grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 ${gridColsClass} xl:gap-8`}
-        >
+        <div className={containerClass}>
           {allCars.map((car, index) => (
-            <CarCard key={`rec-${index}`} car={car} />
+            <div
+              key={`rec-${index}`}
+              className={
+                mobileLayout === 'scroll'
+                  ? 'max-w-[320px] shrink-0 sm:w-auto'
+                  : ''
+              }
+            >
+              <CarCard car={car} isCompactMode={isCompactMode} />
+            </div>
           ))}
         </div>
         {!isShowViewAll && (

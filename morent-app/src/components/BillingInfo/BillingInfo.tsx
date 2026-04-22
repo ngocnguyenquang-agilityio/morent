@@ -40,7 +40,7 @@ export const BillingInfo = ({ className }: BillingInfoProps) => {
       className={className}
     >
       <div className="w-full flex flex-col gap-5 lg:flex-row lg:gap-8">
-        <div className="w-full space-y-5 lg:space-y-6">
+        <div className="w-full max-w-[386px] space-y-5 lg:space-y-6">
           <Controller
             control={control}
             name="name"
@@ -71,7 +71,7 @@ export const BillingInfo = ({ className }: BillingInfoProps) => {
           />
         </div>
 
-        <div className="w-full space-y-5 lg:space-y-6">
+        <div className="w-full max-w-[386px] space-y-5 lg:space-y-6">
           <Controller
             control={control}
             name="phoneNumber"

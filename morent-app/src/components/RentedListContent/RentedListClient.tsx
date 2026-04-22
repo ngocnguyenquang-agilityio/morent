@@ -1,7 +1,7 @@
 'use client';
 
 // Lib
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // Components
@@ -37,6 +37,10 @@ export const RentedListClient = ({ rentals, pagination }: Props) => {
     DEFAULT_PAGE,
     Number(searchParams.get(RENTAL_SEARCH_PARAMS.PAGE)) || DEFAULT_PAGE,
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const [selectedRentalId, setSelectedRentalId] = useState<string | undefined>(
     undefined,

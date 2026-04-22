@@ -51,7 +51,7 @@ export const Reviews = ({
           <Button
             variant="ghost"
             onClick={toggleShowAll}
-            className="flex items-center gap-2 text-sm font-medium text-secondary-300"
+            className="flex items-center gap-2 text-sm lg:text-base font-medium text-secondary-300"
           >
             {showAll ? 'Show Less' : 'Show All'}
             <ChevronDownIcon

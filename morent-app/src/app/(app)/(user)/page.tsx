@@ -46,12 +46,12 @@ const HomePage = () => (
 
     {/* Popular Cars */}
     <Suspense fallback={<CarGridSkeleton count={4} />}>
-      <PopularCarsSection />
+      <PopularCarsSection mobileLayout="scroll" />
     </Suspense>
 
     {/* Recommendation Cars */}
     <Suspense fallback={<CarGridSkeleton count={8} />}>
-      <RecommendationCarsSection />
+      <RecommendationCarsSection isCompactMode />
     </Suspense>
   </div>
 );

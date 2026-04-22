@@ -75,8 +75,8 @@ export const RentalSummary = ({
               className="absolute inset-0 z-10 object-contain p-2"
             />
           </div>
-          <div>
-            <h3 className="text-xl lg:text-[28px] font-bold text-secondary">
+          <div className="min-w-0">
+            <h3 className="truncate text-xl font-bold text-secondary lg:text-[28px]">
               {carName}
             </h3>
             <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">

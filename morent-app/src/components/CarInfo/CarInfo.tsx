@@ -59,10 +59,12 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
         thumbnails={car.thumbnails}
       />
 
-      <div className="flex flex-col rounded-[10px] bg-white p-6 shadow-sm gap-8 w-full">
+      <div className="flex flex-col rounded-[10px] bg-white p-4 lg:p-6 shadow-sm gap-4 lg:gap-8 w-full">
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-4">
-            <h2 className="text-xl font-bold text-secondary-900">{car.name}</h2>
+            <h2 className="text-lg font-bold text-secondary lg:text-xl">
+              {car.name}
+            </h2>
             <Button
               variant="icon"
               size="icon"
@@ -96,13 +98,15 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
                 />
               ))}
             </div>
-            <span className="text-sm text-secondary-400">
+            <span className="font-medium text-xs text-secondary-300 lg:text-sm lg:text-secondary-400">
               {car.reviewer}+ Reviewer
             </span>
           </div>
         </div>
 
-        <p className="text-lg text-secondary-400">{car.description}</p>
+        <p className="text-xs lg:text-lg text-secondary-300 lg:text-secondary-400">
+          {car.description}
+        </p>
 
         <div className="grid grid-cols-2 gap-x-8 gap-y-4">
           <SpecRow label="Type Car" value={car.type} />
@@ -111,11 +115,11 @@ export const CarInfo = ({ car, onFavoriteToggle, className }: CarInfoProps) => {
           <SpecRow label="Gasoline" value={`${car.gasoline}L`} />
         </div>
 
-        <div className="mt-auto pt-8 flex items-center justify-between">
+        <div className="mt-auto pt-4 lg:pt-8 flex items-center justify-between">
           <div>
-            <p className="text-[28px] font-bold text-secondary-500">
+            <p className="text-lg lg:text-[28px] font-bold text-secondary-500">
               ${formatPrice(car.price, car.discount)}/
-              <span className="text-base font-bold text-secondary-300">
+              <span className="text-xs lg:text-base font-bold text-secondary-300">
                 days
               </span>
             </p>

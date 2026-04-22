@@ -29,12 +29,18 @@ export const ReviewItem = ({ review }: ReviewItemProps) => {
             />
           </div>
           <div>
-            <p className="text-lg font-bold text-secondary">{review.name}</p>
-            <p className="text-sm text-secondary-300">{review.title}</p>
+            <p className="text-base lg:text-lg font-bold text-secondary">
+              {review.name}
+            </p>
+            <p className="text-xs lg:text-sm text-secondary-300">
+              {review.title}
+            </p>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">
-          <span className="text-sm text-secondary-300">{review.date}</span>
+          <span className="text-xs lg:text-sm text-secondary-300">
+            {review.date}
+          </span>
           <div
             className="flex items-center gap-0.5"
             role="img"
@@ -53,7 +59,9 @@ export const ReviewItem = ({ review }: ReviewItemProps) => {
           </div>
         </div>
       </div>
-      <p className="mt-4 text-sm text-secondary-400">{review.comment}</p>
+      <p className="mt-4 text-xs lg:text-sm text-secondary-400">
+        {review.comment}
+      </p>
     </div>
   );
 };

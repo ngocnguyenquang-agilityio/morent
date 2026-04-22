@@ -27,11 +27,17 @@ const GRID_COLS_CLASS = {
   4: 'grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 xl:gap-8',
 } as const;
 
+const SCROLL_COLS_CLASS = {
+  3: 'flex overflow-x-auto gap-5 pb-4 sm:grid sm:overflow-visible sm:grid-cols-2 lg:grid-cols-3 lg:gap-8',
+  4: 'flex overflow-x-auto gap-5 pb-4 sm:grid sm:overflow-visible sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8',
+} as const;
+
 interface PopularCarsSectionProps {
   label?: string;
   count?: number;
   gridCols?: keyof typeof GRID_COLS_CLASS;
   isShowViewAll?: boolean;
+  mobileLayout?: 'grid' | 'scroll';
 }
 
 export const PopularCarsSection = ({
@@ -39,6 +45,7 @@ export const PopularCarsSection = ({
   count,
   gridCols = 4,
   isShowViewAll = true,
+  mobileLayout = 'grid',
 }: PopularCarsSectionProps) => {
   const searchParams = useSearchParams();
   const pickDropQuery = extractPickDropParams(searchParams).toString();
@@ -64,10 +71,24 @@ export const PopularCarsSection = ({
       );
     }
 
+    const containerClass =
+      mobileLayout === 'scroll'
+        ? SCROLL_COLS_CLASS[gridCols]
+        : `grid ${GRID_COLS_CLASS[gridCols]}`;
+
     return (
-      <div className={`grid ${GRID_COLS_CLASS[gridCols]}`}>
+      <div className={containerClass}>
         {cars.map((car, index) => (
-          <CarCard key={`popular-${index}`} car={car} />
+          <div
+            key={`popular-${index}`}
+            className={
+              mobileLayout === 'scroll'
+                ? 'max-w-[320px] shrink-0 sm:w-auto'
+                : ''
+            }
+          >
+            <CarCard car={car} />
+          </div>
         ))}
       </div>
     );

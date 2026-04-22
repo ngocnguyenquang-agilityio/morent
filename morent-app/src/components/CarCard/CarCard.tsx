@@ -33,9 +33,15 @@ import { cn } from '@/lib/utils';
 interface CarCardProps {
   car: Car;
   onFavoriteToggle?: (favorite: boolean) => Promise<void>;
+  // layout?: CarCardLayout;
+  isCompactMode?: boolean;
 }
 
-export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
+export const CarCard = ({
+  car,
+  onFavoriteToggle,
+  isCompactMode = false,
+}: CarCardProps) => {
   const { isFavorite, handleFavoriteToggle } = useFavoriteToggle(
     car.documentId,
     car.favorite,
@@ -54,7 +60,12 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
     : ROUTE.PAYMENT(car.documentId);
 
   return (
-    <div className="relative mx-auto flex min-h-[240px] w-full flex-col justify-between rounded-xl bg-white p-4 shadow-sm md:min-h-[388px] md:p-6">
+    <div
+      className={cn(
+        'relative mx-auto p-4 lg:p-6 flex w-full flex-col justify-between rounded-xl bg-white shadow-sm gap-8',
+        // isCompact ? 'min-h-[240px]' : 'min-h-[388px]',
+      )}
+    >
       <Link
         href={detailsUrl}
         aria-label={`View ${car.name} details`}
@@ -62,8 +73,10 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
       />
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-bold text-secondary-900">{car.name}</h3>
-          <p className="text-sm text-secondary-300">{car.type}</p>
+          <h3 className="text-base lg:text-lg font-bold text-secondary">
+            {car.name}
+          </h3>
+          <p className="text-xs lg:text-sm text-secondary-300">{car.type}</p>
         </div>
         <Button
           variant="icon"
@@ -80,50 +93,80 @@ export const CarCard = ({ car, onFavoriteToggle }: CarCardProps) => {
         </Button>
       </div>
 
-      <div className="my-2 flex flex-1 flex-row items-center md:my-8 md:flex-col md:gap-8">
-        <div className="flex-1 pr-4 md:w-full md:pr-0">
+      <div
+        className={cn(
+          'flex items-center gap-8 justify-between',
+          isCompactMode ? 'my-2 flex-row sm:my-0 sm:flex-col' : 'flex-col',
+        )}
+      >
+        <div
+          className={
+            isCompactMode
+              ? 'flex-1 pr-4 sm:flex-none sm:pr-0 sm:w-full'
+              : 'w-full'
+          }
+        >
           <Image
             src={car.image}
             alt={car.name}
             width={300}
             height={120}
-            className="h-auto w-full object-contain"
+            className={cn(
+              'w-full object-contain',
+              isCompactMode ? 'h-[100px] sm:h-[120px]' : 'h-[120px]',
+            )}
           />
         </div>
 
-        <div className="flex flex-col gap-2 text-sm text-secondary-300 md:w-full md:flex-row md:items-center md:justify-between md:gap-0">
+        <div
+          className={cn(
+            'flex text-sm text-secondary-300',
+            isCompactMode
+              ? 'flex-col gap-4 sm:w-full sm:flex-row sm:items-center sm:justify-between sm:gap-0'
+              : 'w-full flex-row items-center justify-between',
+          )}
+        >
           <div className="flex items-center gap-1.5">
             <GasStationIcon className="size-4" />
-            <span>{car.gasoline}L</span>
+            <span className="text-xs lg:text-sm text-secondary-300">
+              {car.gasoline}L
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <SteeringIcon className="size-4" />
-            <span>{car.steering}</span>
+            <span className="text-xs lg:text-sm text-secondary-300">
+              {car.steering}
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <PeopleIcon className="size-4" />
-            <span>{car.capacity} People</span>
+            <span className="text-xs lg:text-sm text-secondary-300">
+              {car.capacity} People
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-6">
+      <div className={cn('flex items-center justify-between gap-2')}>
         <div className="flex flex-col">
-          <p className="text-lg font-bold text-secondary-900">
+          <p className="text-base lg:text-lg font-bold text-secondary">
             ${formatPrice(car.price, car.discount)}
-            <span className="text-sm font-normal text-secondary-300">
+            <span className="text-xs lg:text-sm font-bold text-secondary-300">
               &#47;day
             </span>
           </p>
           {car.discount > 0 && (
-            <p className="text-sm text-secondary-300 line-through">
+            <p className="text-xs lg:text-sm font-bold text-secondary-300 line-through">
               ${formatPrice(car.price)}
             </p>
           )}
         </div>
         <Button
           asChild
-          className="relative z-10 h-[44px] shrink-0 px-4 text-sm md:h-[48px] md:px-5 md:text-base"
+          className={cn(
+            'relative z-10 shrink-0 text-xs lg:text-base px-4 py-2.5 lg:px-5 rounded-sm',
+            isCompactMode ? 'h-[44px] sm:h-[48px]' : 'h-[48px]',
+          )}
         >
           <Link
             href={paymentUrl}

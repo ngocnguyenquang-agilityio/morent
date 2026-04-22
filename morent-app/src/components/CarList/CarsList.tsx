@@ -94,9 +94,9 @@ export const CarsList = () => {
 
     return (
       <>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 xl:grid-cols-3 xl:gap-8">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 xl:grid-cols-3 xl:gap-8 2xl:grid-cols-4">
           {allCars.map((car) => (
-            <CarCard key={car.documentId} car={car} />
+            <CarCard key={car.documentId} car={car} isCompactMode />
           ))}
         </div>
 

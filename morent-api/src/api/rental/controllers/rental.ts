@@ -1,5 +1,5 @@
 import { factories } from "@strapi/strapi";
-import { PAGE_SIZE_DEFAULTS } from "@constant";
+import { PAGE_SIZE_DEFAULTS } from "../../../../constant";
 
 export default factories.createCoreController(
   "api::rental.rental",
