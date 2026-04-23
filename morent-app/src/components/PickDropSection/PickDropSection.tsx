@@ -18,6 +18,7 @@ interface PickDropSectionProps {
   onChange?: (values: SectionValues) => void;
   readOnly?: boolean;
   className?: string;
+  minDate?: Date;
 }
 
 export const PickDropSection = ({
@@ -27,6 +28,7 @@ export const PickDropSection = ({
   onChange,
   readOnly = false,
   className,
+  minDate,
 }: PickDropSectionProps) => {
   const handleLocationChange = (location: string) => {
     onChange?.({ ...values, location });
@@ -67,7 +69,11 @@ export const PickDropSection = ({
 
         <div className="flex flex-col gap-1 border-l border-secondary-100 pl-3">
           <span className="text-base font-bold text-secondary">Date</span>
-          <DatePicker value={values.date} onChange={handleDateChange} />
+          <DatePicker
+            value={values.date}
+            onChange={handleDateChange}
+            minDate={minDate}
+          />
         </div>
 
         <div className="flex flex-col gap-1 border-l border-secondary-100 pl-3">

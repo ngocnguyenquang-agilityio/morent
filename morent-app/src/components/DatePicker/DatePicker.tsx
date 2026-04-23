@@ -29,6 +29,7 @@ interface DatePickerProps {
   className?: string;
   error?: string;
   readOnly?: boolean;
+  minDate?: Date;
 }
 
 export const DatePicker = ({
@@ -38,6 +39,7 @@ export const DatePicker = ({
   className,
   error,
   readOnly = false,
+  minDate,
 }: DatePickerProps) => {
   const [open, setOpen] = useState(false);
 
@@ -76,7 +78,7 @@ export const DatePicker = ({
             mode="single"
             selected={value}
             onSelect={handleSelect}
-            disabled={{ before: new Date() }}
+            disabled={{ before: minDate ?? new Date() }}
             initialFocus
           />
         </PopoverContent>

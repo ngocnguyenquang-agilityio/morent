@@ -73,6 +73,15 @@ export const PaymentFormSchema = Schema.Struct({
   agreeTerms: Schema.Literal(true).annotations({
     message: () => PAYMENT_MESSAGES.AGREE_TERMS_REQUIRED,
   }),
-});
+}).pipe(
+  Schema.filter((values) => {
+    if (values.dropOff.date <= values.pickUp.date) {
+      return {
+        path: ['dropOff', 'date'],
+        message: PAYMENT_MESSAGES.DROP_OFF_DATE_AFTER_PICK_UP,
+      };
+    }
+  }),
+);
 
 export type PaymentFormValues = typeof PaymentFormSchema.Type;

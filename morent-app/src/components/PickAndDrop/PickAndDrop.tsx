@@ -2,6 +2,7 @@
 
 // Lib
 import { useState } from 'react';
+import { addDays } from 'date-fns';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 // Components
@@ -60,7 +61,11 @@ export const PickAndDrop = ({
   };
 
   const handlePickUpChange = (pickUp: SectionValues) => {
-    const next = { ...values, pickUp };
+    const dropOff =
+      pickUp.date && values.dropOff.date && values.dropOff.date <= pickUp.date
+        ? { ...values.dropOff, date: undefined }
+        : values.dropOff;
+    const next = { pickUp, dropOff };
     setValues(next);
     onChange?.(next);
     syncToUrl(next);
@@ -110,6 +115,9 @@ export const PickAndDrop = ({
         values={values.dropOff}
         locations={locations}
         onChange={handleDropOffChange}
+        minDate={
+          values.pickUp.date ? addDays(values.pickUp.date, 1) : undefined
+        }
       />
     </div>
   );

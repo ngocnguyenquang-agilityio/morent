@@ -37,7 +37,7 @@ export const TimePicker = ({
       <Select value={value} onValueChange={readOnly ? undefined : onChange}>
         <SelectTrigger
           className={cn(
-            'h-auto w-full border-0 bg-transparent px-0 text-xs font-normal shadow-none focus-visible:ring-0 text-secondary-300 data-placeholder:text-secondary-300',
+            'h-auto w-full border-0 bg-transparent px-0 text-xs font-normal shadow-none focus-visible:ring-0 text-secondary-300 data-placeholder:text-secondary-300 cursor-pointer',
             {
               'pointer-events-none': readOnly,
             },

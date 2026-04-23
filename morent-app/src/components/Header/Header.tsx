@@ -97,7 +97,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
   );
 
   const avatarDropdown = (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <button
           type="button"

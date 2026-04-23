@@ -10,6 +10,7 @@ export const PAYMENT_MESSAGES = {
   PICK_UP_TIME_REQUIRED: 'Pick-up time is required',
   DROP_OFF_LOCATION_REQUIRED: 'Drop-off location is required',
   DROP_OFF_DATE_REQUIRED: 'Drop-off date is required',
+  DROP_OFF_DATE_AFTER_PICK_UP: 'Drop-off date should be after Pick-up date',
   DROP_OFF_TIME_REQUIRED: 'Drop-off time is required',
   NAME_REQUIRED: 'Name is required',
   NAME_MIN_LENGTH: 'Name must be at least 2 characters',

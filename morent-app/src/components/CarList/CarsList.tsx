@@ -112,7 +112,7 @@ export const CarsList = () => {
             </Button>
           )}
           <span className="absolute right-0 text-sm font-medium text-secondary-300">
-            {total} Car
+            {total} Cars
           </span>
         </div>
       </>

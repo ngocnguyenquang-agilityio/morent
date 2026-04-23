@@ -1,7 +1,8 @@
 'use client';
 
 // Lib
-import { Controller, useFormContext } from 'react-hook-form';
+import { addDays } from 'date-fns';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 // Components
 import { PaymentSection } from '@/components/PaymentSection';
@@ -32,6 +33,8 @@ export const RentalInfo = ({
   locations = DEFAULT_LOCATIONS,
 }: RentalInfoProps) => {
   const { control } = useFormContext<RentalInfoFields>();
+  const pickUpDate = useWatch({ control, name: 'pickUp.date' });
+  const dropOffMinDate = pickUpDate ? addDays(pickUpDate, 1) : undefined;
 
   return (
     <PaymentSection
@@ -137,7 +140,11 @@ export const RentalInfo = ({
                   className="order-3 md:order-2"
                   error={fieldState.error?.message}
                 >
-                  <DatePicker value={field.value} onChange={field.onChange} />
+                  <DatePicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    minDate={dropOffMinDate}
+                  />
                 </SelectField>
               )}
             />
