@@ -10,8 +10,10 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/',
 }));
 
+const mockUseUser = jest.fn();
+
 jest.mock('@clerk/nextjs', () => ({
-  useUser: () => ({ user: null, isSignedIn: false }),
+  useUser: () => mockUseUser(),
   useClerk: () => ({ signOut: jest.fn() }),
 }));
 
@@ -24,6 +26,10 @@ jest.mock('@/hooks/useDebounce', () => ({
 }));
 
 describe('Header', () => {
+  beforeEach(() => {
+    mockUseUser.mockReturnValue({ user: null, isSignedIn: false });
+  });
+
   it('renders the logo with a link to home', () => {
     render(<Header />);
 
@@ -39,7 +45,19 @@ describe('Header', () => {
     expect(inputs.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders desktop icon buttons', () => {
+  it('hides icon buttons when user is not signed in', () => {
+    render(<Header />);
+
+    expect(screen.queryByLabelText('Favorites')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Notifications')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Settings')).not.toBeInTheDocument();
+  });
+
+  it('renders desktop icon buttons when user is signed in', () => {
+    mockUseUser.mockReturnValue({
+      user: { fullName: 'Test User', imageUrl: '' },
+      isSignedIn: true,
+    });
     render(<Header />);
 
     expect(screen.getByLabelText('Favorites')).toBeInTheDocument();
@@ -54,7 +72,11 @@ describe('Header', () => {
     expect(screen.getByLabelText('Menu')).toBeInTheDocument();
   });
 
-  it('renders the notification badge', () => {
+  it('renders the notification badge when user is signed in', () => {
+    mockUseUser.mockReturnValue({
+      user: { fullName: 'Test User', imageUrl: '' },
+      isSignedIn: true,
+    });
     render(<Header />);
 
     const badge = document.querySelector('[aria-label="Notifications"] span');

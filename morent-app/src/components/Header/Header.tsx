@@ -141,30 +141,34 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button
-            type="button"
-            variant="icon"
-            size="icon-xl"
-            icon={HeartIcon}
-            aria-label="Favorites"
-            iconClassName="fill-[#3D5278]"
-          />
-          <Button
-            type="button"
-            variant="icon"
-            size="icon-xl"
-            icon={NotificationIcon}
-            aria-label="Notifications"
-          >
-            <span className="absolute top-2 right-2 size-[10px] bg-[#FF4423] rounded-full border-2 border-white" />
-          </Button>
-          <Button
-            type="button"
-            variant="icon"
-            size="icon-xl"
-            icon={SettingIcon}
-            aria-label="Settings"
-          />
+          {isSignedIn && (
+            <>
+              <Button
+                type="button"
+                variant="icon"
+                size="icon-xl"
+                icon={HeartIcon}
+                aria-label="Favorites"
+                iconClassName="fill-[#3D5278]"
+              />
+              <Button
+                type="button"
+                variant="icon"
+                size="icon-xl"
+                icon={NotificationIcon}
+                aria-label="Notifications"
+              >
+                <span className="absolute top-2 right-2 size-[10px] bg-[#FF4423] rounded-full border-2 border-white" />
+              </Button>
+              <Button
+                type="button"
+                variant="icon"
+                size="icon-xl"
+                icon={SettingIcon}
+                aria-label="Settings"
+              />
+            </>
+          )}
           {userAction}
         </div>
       </div>
