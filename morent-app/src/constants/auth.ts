@@ -32,3 +32,4 @@ export const clerkAppearance = {
 export const ADMIN_ROLE_TYPE = 'admin';
 export const USER_ROLE_TYPE = 'user';
 export const USER_ROLE_COOKIE = 'user_role';
+export const REDIRECT_URL_PARAM = 'redirect_url';
