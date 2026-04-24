@@ -14,6 +14,11 @@ export const ROUTE = {
   SIGN_IN_REDIRECT: (params: string) => `/sign-in?redirect_url=${params}`,
 };
 
+export const PROTECTED_ROUTE_PATTERNS = [
+  '/rented-list(.*)',
+  '/cars/(.*)/payment(.*)',
+] as const;
+
 export const PATH = {
   CARS: '/api/cars',
   CARS_POPULAR: '/api/cars/popular',

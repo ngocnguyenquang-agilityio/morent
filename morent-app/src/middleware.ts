@@ -1,19 +1,20 @@
 // Lib
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 // Services
 import { fetchStrapiUserByClerkId } from '@/services/user';
 
 // Constants
-import { ROUTE } from '@/constants/route';
+import { PROTECTED_ROUTE_PATTERNS, ROUTE } from '@/constants/route';
 import {
   ADMIN_ROLE_TYPE,
   USER_ROLE_TYPE,
   USER_ROLE_COOKIE,
+  REDIRECT_URL_PARAM,
 } from '@/constants/auth';
 
-const PROTECTED_ROUTES = [ROUTE.RENTED_LIST];
+const isProtectedRoute = createRouteMatcher([...PROTECTED_ROUTE_PATTERNS]);
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
@@ -26,13 +27,10 @@ export default clerkMiddleware(async (auth, req) => {
       return res;
     }
 
-    const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
-      req.nextUrl.pathname.startsWith(route),
-    );
-
-    if (isProtectedRoute) {
-      const signInRedirectPath = ROUTE.SIGN_IN_REDIRECT(req.nextUrl.pathname);
-      const signInUrl = new URL(signInRedirectPath, req.url);
+    if (isProtectedRoute(req)) {
+      const redirectTarget = req.nextUrl.pathname + req.nextUrl.search;
+      const signInUrl = new URL(ROUTE.SIGN_IN, req.url);
+      signInUrl.searchParams.set(REDIRECT_URL_PARAM, redirectTarget);
       return NextResponse.redirect(signInUrl);
     }
 
