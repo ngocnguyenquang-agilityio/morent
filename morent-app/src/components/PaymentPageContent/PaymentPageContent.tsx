@@ -1,7 +1,6 @@
 'use client';
 
 // Lib
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -28,7 +27,6 @@ import { RentalInfo } from '@/components/RentalInfo/RentalInfo';
 import { PaymentMethod } from '@/components/PaymentMethod/PaymentMethod';
 import { Confirmation } from '@/components/Confirmation/Confirmation';
 import { RentalSummary } from '@/components/RentalSummary/RentalSummary';
-import { RentalConfirmationDialog } from '@/components/RentalConfirmationDialog/RentalConfirmationDialog';
 
 interface PaymentPageContentProps {
   car: Car;
@@ -59,7 +57,6 @@ export const PaymentPageContent = ({
   });
 
   const router = useRouter();
-  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const {
     mutate,
@@ -67,7 +64,7 @@ export const PaymentPageContent = ({
     isPending,
   } = useMutation({
     mutationFn: submitRental,
-    onSuccess: () => setShowConfirmation(true),
+    onSuccess: () => router.push(ROUTE.RENTED_LIST),
   });
 
   const handleSubmit = (values: PaymentFormValues) => {
@@ -81,14 +78,6 @@ export const PaymentPageContent = ({
       dropOffDate: values.dropOff.date.toISOString(),
       dropOffTime: values.dropOff.time,
     });
-  };
-
-  const handleCloseConfirmation = () => {
-    setShowConfirmation(false);
-  };
-
-  const handleClickDone = () => {
-    router.push(ROUTE.RENTED_LIST);
   };
 
   return (
@@ -125,12 +114,6 @@ export const PaymentPageContent = ({
             {rentalError.message}
           </p>
         )}
-        <RentalConfirmationDialog
-          open={showConfirmation}
-          carName={car.name}
-          onClose={handleCloseConfirmation}
-          onDone={handleClickDone}
-        />
       </form>
     </FormProvider>
   );
