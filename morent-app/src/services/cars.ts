@@ -1,6 +1,5 @@
 // Lib
-import { Data, Effect, ParseResult, Schema } from 'effect';
-import qs from 'qs';
+import { Effect, ParseResult, Schema } from 'effect';
 
 // Types
 import {
@@ -16,54 +15,46 @@ import {
 import { PATH, STRAPI_BASE_URL } from '@/constants/route';
 import { CAR_ERROR } from '@/constants/error';
 
-export class FetchCarsError extends Data.TaggedError('FetchCarsError')<{
-  message: string;
-  cause: unknown;
-}> {}
+// Utils
+import {
+  buildQuery,
+  fetchAndParse,
+  makeServiceError,
+  SchemaDecodeError,
+} from '@/utils/services';
 
-export class SchemaDecodeError extends Data.TaggedError('SchemaDecodeError')<{
-  message: string;
-  cause: ParseResult.ParseError;
-}> {}
+const CAR_LIST_POPULATE = ['image', 'thumbnails'] as const;
+const CAR_DETAIL_POPULATE = [...CAR_LIST_POPULATE, 'reviews'] as const;
+
+export class FetchCarsError extends makeServiceError('FetchCarsError') {}
+
+const toFetchCarsError = (message: string) => (cause: unknown) =>
+  new FetchCarsError({ message, cause });
+
+const toDecodeError = (e: ParseResult.ParseError) =>
+  new SchemaDecodeError({ message: CAR_ERROR.PARSE_RESPONSE, cause: e });
+
+const fetchCarsEndpoint = <A, I>(
+  path: string,
+  schema: Schema.Schema<A, I>,
+  fetchErrorMessage: string,
+): Effect.Effect<A, FetchCarsError | SchemaDecodeError> =>
+  fetchAndParse(
+    `${STRAPI_BASE_URL}${path}`,
+    schema,
+    toFetchCarsError(fetchErrorMessage),
+    toDecodeError,
+  );
 
 const fetchAndParseCars = (
   path: string,
   fetchErrorMessage: string,
 ): Effect.Effect<CarsApiResult, FetchCarsError | SchemaDecodeError> =>
-  Effect.tryPromise({
-    try: () => fetch(`${STRAPI_BASE_URL}${path}`),
-    catch: (cause) => new FetchCarsError({ message: fetchErrorMessage, cause }),
-  }).pipe(
-    Effect.filterOrFail(
-      (res) => res.ok,
-      (res) =>
-        new FetchCarsError({
-          message: fetchErrorMessage,
-          cause: res.statusText,
-        }),
-    ),
-    Effect.flatMap((res) =>
-      Effect.tryPromise({
-        try: () => res.json() as Promise<unknown>,
-        catch: (cause) =>
-          new FetchCarsError({ message: fetchErrorMessage, cause }),
-      }),
-    ),
-    Effect.flatMap((json) =>
-      Schema.decodeUnknown(StrapiCarsResponse)(json).pipe(
-        Effect.mapError(
-          (e) =>
-            new SchemaDecodeError({
-              message: CAR_ERROR.PARSE_RESPONSE,
-              cause: e,
-            }),
-        ),
-        Effect.map((decoded) => ({
-          data: decoded.data,
-          pagination: decoded.meta.pagination,
-        })),
-      ),
-    ),
+  fetchCarsEndpoint(path, StrapiCarsResponse, fetchErrorMessage).pipe(
+    Effect.map((decoded) => ({
+      data: decoded.data,
+      pagination: decoded.meta.pagination,
+    })),
   );
 
 const carsFilterQuery = (
@@ -92,21 +83,21 @@ const carsFilterQuery = (
   return strapiFilters;
 };
 
-const buildCarsQuery = (params?: GetCarsParams): string =>
-  qs.stringify(
-    {
-      populate: ['image', 'thumbnails'],
-      filters: carsFilterQuery(params?.filters),
-      pagination: params?.pagination,
-      sort: params?.sort,
-    },
-    { encodeValuesOnly: true },
-  );
+const buildCarsQuery = (
+  populate: readonly string[],
+  params?: GetCarsParams,
+): string =>
+  buildQuery({
+    populate,
+    filters: carsFilterQuery(params?.filters),
+    pagination: params?.pagination,
+    sort: params?.sort,
+  });
 
 export const fetchPopularCars = (): Promise<CarsApiResult> =>
   Effect.runPromise(
     fetchAndParseCars(
-      `${PATH.CARS_POPULAR}?${buildCarsQuery()}`,
+      `${PATH.CARS_POPULAR}?${buildCarsQuery(CAR_LIST_POPULATE)}`,
       CAR_ERROR.FETCH_POPULAR,
     ),
   );
@@ -116,7 +107,7 @@ export const fetchRecommendationCars = (
 ): Promise<CarsApiResult> =>
   Effect.runPromise(
     fetchAndParseCars(
-      `${PATH.CARS}?${buildCarsQuery({ pagination: { page: params?.page, pageSize: params?.pageSize } })}`,
+      `${PATH.CARS}?${buildCarsQuery(CAR_LIST_POPULATE, { pagination: { page: params?.page, pageSize: params?.pageSize } })}`,
       CAR_ERROR.FETCH_RECOMMENDATION,
     ),
   );
@@ -124,58 +115,16 @@ export const fetchRecommendationCars = (
 export const fetchCars = (params?: GetCarsParams): Promise<CarsApiResult> =>
   Effect.runPromise(
     fetchAndParseCars(
-      `${PATH.CARS}?${buildCarsQuery(params)}`,
+      `${PATH.CARS}?${buildCarsQuery(CAR_LIST_POPULATE, params)}`,
       CAR_ERROR.FETCH_CARS,
     ),
   );
 
-const fetchAndParseCar = (
-  path: string,
-  fetchErrorMessage: string,
-): Effect.Effect<Car, FetchCarsError | SchemaDecodeError> =>
-  Effect.tryPromise({
-    try: () => fetch(`${STRAPI_BASE_URL}${path}`),
-    catch: (cause) => new FetchCarsError({ message: fetchErrorMessage, cause }),
-  }).pipe(
-    Effect.filterOrFail(
-      (res) => res.ok,
-      (res) =>
-        new FetchCarsError({
-          message: fetchErrorMessage,
-          cause: res.statusText,
-        }),
-    ),
-    Effect.flatMap((res) =>
-      Effect.tryPromise({
-        try: () => res.json() as Promise<unknown>,
-        catch: (cause) =>
-          new FetchCarsError({ message: fetchErrorMessage, cause }),
-      }),
-    ),
-    Effect.flatMap((json) =>
-      Schema.decodeUnknown(StrapiCarResponse)(json).pipe(
-        Effect.mapError(
-          (e) =>
-            new SchemaDecodeError({
-              message: CAR_ERROR.PARSE_RESPONSE,
-              cause: e,
-            }),
-        ),
-        Effect.map((decoded) => decoded.data),
-      ),
-    ),
-  );
-
-const buildCarQuery = (): string =>
-  qs.stringify(
-    { populate: ['image', 'thumbnails', 'reviews'] },
-    { encodeValuesOnly: true },
-  );
-
 export const fetchCarById = (documentId: string): Promise<Car> =>
   Effect.runPromise(
-    fetchAndParseCar(
-      `${PATH.CAR(documentId)}?${buildCarQuery()}`,
+    fetchCarsEndpoint(
+      `${PATH.CAR(documentId)}?${buildCarsQuery(CAR_DETAIL_POPULATE)}`,
+      StrapiCarResponse,
       CAR_ERROR.FETCH_CAR_DETAIL,
-    ),
+    ).pipe(Effect.map((decoded) => decoded.data)),
   );

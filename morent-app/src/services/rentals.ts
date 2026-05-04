@@ -1,6 +1,5 @@
 // Lib
-import { Data, Effect, ParseResult, Schema } from 'effect';
-import qs from 'qs';
+import { Effect } from 'effect';
 
 // Types
 import {
@@ -12,6 +11,18 @@ import {
 // Constants
 import { PATH, STRAPI_BASE_URL } from '@/constants/route';
 import { RENTAL_ERROR } from '@/constants/error';
+
+// Utils
+import {
+  buildQuery,
+  fetchAndParse,
+  makeServiceError,
+  SchemaDecodeError,
+} from '@/utils/services';
+
+const RENTAL_LIST_POPULATE = ['car.image'] as const;
+const RENTAL_LIST_SORT = ['createdAt:desc'] as const;
+const MY_RENTALS_PAGE_SIZE = 6;
 
 export interface CreateRentalParams {
   carDocumentId: string;
@@ -27,10 +38,7 @@ export interface CreateRentalParams {
 
 export type CreateRentalPayload = Omit<CreateRentalParams, 'strapiUserId'>;
 
-export class CreateRentalError extends Data.TaggedError('CreateRentalError')<{
-  message: string;
-  cause: unknown;
-}> {}
+export class CreateRentalError extends makeServiceError('CreateRentalError') {}
 
 export const createRental = (
   input: CreateRentalParams,
@@ -81,92 +89,30 @@ export const submitRental = (input: CreateRentalPayload): Promise<void> =>
     }).pipe(Effect.asVoid),
   );
 
-export class FetchRentalsError extends Data.TaggedError('FetchRentalsError')<{
-  message: string;
-  cause: unknown;
-}> {}
-
-export class SchemaDecodeError extends Data.TaggedError('SchemaDecodeError')<{
-  message: string;
-  cause: ParseResult.ParseError;
-}> {}
+export class FetchRentalsError extends makeServiceError('FetchRentalsError') {}
 
 const fetchAndParseRentals = (
   path: string,
   fetchErrorMessage: string,
 ): Effect.Effect<RentalsApiResult, FetchRentalsError | SchemaDecodeError> =>
-  Effect.tryPromise({
-    try: () => fetch(`${STRAPI_BASE_URL}${path}`),
-    catch: (cause) =>
-      new FetchRentalsError({ message: fetchErrorMessage, cause }),
-  }).pipe(
-    Effect.filterOrFail(
-      (res) => res.ok,
-      (res) =>
-        new FetchRentalsError({
-          message: fetchErrorMessage,
-          cause: res.statusText,
-        }),
-    ),
-    Effect.flatMap((res) =>
-      Effect.tryPromise({
-        try: () => res.json() as Promise<unknown>,
-        catch: (cause) =>
-          new FetchRentalsError({ message: fetchErrorMessage, cause }),
-      }),
-    ),
-    Effect.flatMap((json) =>
-      Schema.decodeUnknown(StrapiRentalsResponse)(json).pipe(
-        Effect.mapError(
-          (e) =>
-            new SchemaDecodeError({
-              message: RENTAL_ERROR.PARSE_RESPONSE,
-              cause: e,
-            }),
-        ),
-        Effect.map((decoded) => ({
-          data: decoded.data,
-          pagination: decoded.meta.pagination,
-        })),
-      ),
-    ),
-  );
-
-const buildRecentRentalsQuery = (): string =>
-  qs.stringify(
-    {
-      populate: ['car.image'],
-      sort: ['createdAt:desc'],
-      pagination: { page: 1, pageSize: 4 },
-    },
-    { encodeValuesOnly: true },
-  );
-
-const buildLatestRentalQuery = (): string =>
-  qs.stringify(
-    {
-      populate: ['car.image'],
-      sort: ['createdAt:desc'],
-      pagination: { page: 1, pageSize: 1 },
-    },
-    { encodeValuesOnly: true },
-  );
-
-const buildMyRentalsQuery = (strapiUserId: number, page: number): string =>
-  qs.stringify(
-    {
-      filters: { user: { id: { $eq: strapiUserId } } },
-      populate: { car: { populate: ['image'] } },
-      sort: ['createdAt:desc'],
-      pagination: { page, pageSize: 6 },
-    },
-    { encodeValuesOnly: true },
+  fetchAndParse(
+    `${STRAPI_BASE_URL}${path}`,
+    StrapiRentalsResponse,
+    (cause) => new FetchRentalsError({ message: fetchErrorMessage, cause }),
+    (e) =>
+      new SchemaDecodeError({ message: RENTAL_ERROR.PARSE_RESPONSE, cause: e }),
+  ).pipe(
+    // Reshape decoded response into the { data, pagination } result shape
+    Effect.map((decoded) => ({
+      data: decoded.data,
+      pagination: decoded.meta.pagination,
+    })),
   );
 
 export const fetchRecentRentals = (): Promise<RentalsApiResult> =>
   Effect.runPromise(
     fetchAndParseRentals(
-      `${PATH.RENTALS}?${buildRecentRentalsQuery()}`,
+      `${PATH.RENTALS}?${buildQuery({ populate: RENTAL_LIST_POPULATE, sort: RENTAL_LIST_SORT, pagination: { page: 1, pageSize: 4 } })}`,
       RENTAL_ERROR.FETCH_RECENT,
     ),
   );
@@ -174,7 +120,7 @@ export const fetchRecentRentals = (): Promise<RentalsApiResult> =>
 export const fetchLatestRental = (): Promise<Rental | null> =>
   Effect.runPromise(
     fetchAndParseRentals(
-      `${PATH.RENTALS}?${buildLatestRentalQuery()}`,
+      `${PATH.RENTALS}?${buildQuery({ populate: RENTAL_LIST_POPULATE, sort: RENTAL_LIST_SORT, pagination: { page: 1, pageSize: 1 } })}`,
       RENTAL_ERROR.FETCH_LATEST,
     ).pipe(
       Effect.map((result) => (result.data.length > 0 ? result.data[0] : null)),
@@ -186,54 +132,24 @@ export const fetchMyRentals = (
   page: number,
 ): Promise<RentalsApiResult> =>
   Effect.runPromise(
-    Effect.tryPromise({
-      try: () =>
-        fetch(
-          `${STRAPI_BASE_URL}${PATH.RENTALS}?${buildMyRentalsQuery(strapiUserId, page)}`,
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-            },
-          },
-        ),
-      catch: (cause) =>
+    fetchAndParse(
+      `${STRAPI_BASE_URL}${PATH.RENTALS}?${buildQuery({ filters: { user: { id: { $eq: strapiUserId } } }, populate: { car: { populate: RENTAL_LIST_POPULATE } }, sort: RENTAL_LIST_SORT, pagination: { page, pageSize: MY_RENTALS_PAGE_SIZE } })}`,
+      StrapiRentalsResponse,
+      (cause) =>
         new FetchRentalsError({
           message: RENTAL_ERROR.FETCH_MY_RENTALS,
           cause,
         }),
-    }).pipe(
-      Effect.filterOrFail(
-        (res) => res.ok,
-        (res) =>
-          new FetchRentalsError({
-            message: RENTAL_ERROR.FETCH_MY_RENTALS,
-            cause: res.statusText,
-          }),
-      ),
-      Effect.flatMap((res) =>
-        Effect.tryPromise({
-          try: () => res.json() as Promise<unknown>,
-          catch: (cause) =>
-            new FetchRentalsError({
-              message: RENTAL_ERROR.FETCH_MY_RENTALS,
-              cause,
-            }),
+      (e) =>
+        new SchemaDecodeError({
+          message: RENTAL_ERROR.PARSE_RESPONSE,
+          cause: e,
         }),
-      ),
-      Effect.flatMap((json) =>
-        Schema.decodeUnknown(StrapiRentalsResponse)(json).pipe(
-          Effect.mapError(
-            (e) =>
-              new SchemaDecodeError({
-                message: RENTAL_ERROR.PARSE_RESPONSE,
-                cause: e,
-              }),
-          ),
-          Effect.map((decoded) => ({
-            data: decoded.data,
-            pagination: decoded.meta.pagination,
-          })),
-        ),
-      ),
+      { headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` } }, // auth header
+    ).pipe(
+      Effect.map((decoded) => ({
+        data: decoded.data,
+        pagination: decoded.meta.pagination,
+      })),
     ),
   );
